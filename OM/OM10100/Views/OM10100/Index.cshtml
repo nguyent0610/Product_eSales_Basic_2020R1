@@ -1,0 +1,87 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM10100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "OM10100";
+    var acc = Session["OM10100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    @*<script src='@Url.Content("Scripts/hq.language" + Current.LangID + ".js?" + DateTime.Now.ToString("yyyyMMddssHHmm"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js?" + DateTime.Now.ToString("yyyyMMddssHHmm"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/OM10100.js?" + DateTime.Now.ToString("yyyyMMddssHHmm"))' type="text/javascript"></script>*@
+
+    @Scripts.Render("~/language" + Current.LangID)
+    @Styles.Render("~/extcss")
+
+    @Scripts.Render("~/extjs")
+    @Scripts.Render("~/OM10100JS")
+
+    @*<script src='@Url.Content("Scripts/screen/OM10100body.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/OM10100.js?" + DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>*@
+    
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+        #btnChoiceOk {
+            float: right;
+        }
+        #bottomBar {
+            Width: 100%;
+        }
+        #ctnBottomBar {
+            Width: 100%;
+        }
+        #ctnBottomBar-outerCt {
+            Width: 100%;
+        }
+        #ctnBottomBar-innerCt {
+            Width: 100%;
+        }
+    </style>
+    <script>
+        HQ.cpnyID = '@ViewBag.BranchID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date('@ViewBag.BussinessTime');//lay ngay co gio cua server trong controller
+        HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        HQ.isShowMess = HQ.util.toBool('@ViewBag.IsShowMess');
+        HQ.allowImport = HQ.util.toBool('@ViewBag.AllowImport');
+        HQ.DeleteRow = '@ViewBag.DeleteRow';
+        HQ.IsNewBackOrder = HQ.util.toBool('@ViewBag.IsNewBackOrder');
+        HQ.ShowLTTContractNbr = HQ.util.toBool('@ViewBag.ShowLTTContractNbr');
+        HQ.ShowCreditHold = HQ.util.toBool('@ViewBag.ShowCreditHold');
+        HQ.ShowDocBal = HQ.util.toBool('@ViewBag.ShowDocBal');
+        HQ.showWhseLoc = parseInt('@ViewBag.showWhseLoc');
+        HQ.formatDateJS = '@Current.FormatDateJS';
+        
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+        @*@(
+            X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull()))
+        )
+            
+        @X.GridFilters()
+        @X.ProgressBarPager()
+        
+        @{ Html.RenderAction("Body", new { lang = Current.LangID.ToString() }); }*@
+    @*@{ Html.RenderAction("BodyCurrent", new { lang = Current.LangID.ToString() }); }*@
+
+    </body>
+    </html>
+    

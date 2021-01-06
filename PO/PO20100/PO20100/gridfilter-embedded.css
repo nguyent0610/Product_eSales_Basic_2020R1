@@ -1,0 +1,36 @@
+.ux-rangemenu-icon {
+    display: block;
+    height: 16px;
+    background: no-repeat 5px center;
+}
+
+.ux-rangemenu-gt {
+    background-image: url("ux/resources/images/gridfilters/greater_than-png/ext.axd") !important;
+}
+
+.ux-rangemenu-lt {
+    background-image: url("ux/resources/images/gridfilters/less_than-png/ext.axd") !important;
+}
+
+.ux-rangemenu-eq {
+    background-image: url("ux/resources/images/gridfilters/equals-png/ext.axd") !important;
+}
+
+
+.ux-filtered-column {
+    font-style: italic;  
+    font-weight: bold;    
+}
+
+.ux-filtered-column .x-column-header-inner{
+    background: transparent url("ux/resources/images/gridfilters/header_bg-png/ext.axd") no-repeat !important;
+	padding-left: 22px;
+}
+
+.ux-filtered-column.x-column-header-align-center .x-column-header-inner {
+    padding-right: 22px;
+}
+
+.ux-gridfilter-text-icon {
+    background-image: url("ux/resources/images/gridfilters/find-png/ext.axd") !important;
+}

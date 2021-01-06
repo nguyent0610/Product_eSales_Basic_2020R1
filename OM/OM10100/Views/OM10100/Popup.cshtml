@@ -1,0 +1,118 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM10100;
+
+@model System.Collections.IEnumerable
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+    ViewBag.Title = "OM10100";
+    var acc = Session["OM10100"] as AccessRight;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/hq.common.js")' type="text/javascript"></script>
+    <script src='@Url.Content("Scripts/screen/OM10100.js")' type="text/javascript"></script>
+
+    @Scripts.Render("~/language" + Current.LangID)
+    @Styles.Render("~/extcss")
+    @Scripts.Render("~/extjs")
+    <script src='@Url.Content("Scripts/screen/OM10100popup.js?"+DateTime.Now.ToString("yyyyMMddss"))' type="text/javascript"></script>
+
+    <style>
+        .x-grid-row-over .x-grid-cell-inner {
+            font-weight : bold;
+        }
+    </style>
+    <script>
+
+        HQ.cpnyID = '@Current.CpnyID';
+        HQ.langID = '@Current.LangID';
+        HQ.userName = '@Current.UserName';
+        HQ.businessDate = new Date();
+        HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
+        HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+        HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+        HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+        var btnPopupOk_Click = function () {
+            if (!Ext.isEmpty(App.cboPopupCpny.getValue())) {
+                App.winPopup.hide();
+                window.location.href = 'OM10100?branchID=' + App.cboPopupCpny.getValue();
+            } else {
+                HQ.message.show(1000, [HQ.common.getLang('branchid')], '', true);
+            }
+        };
+    </script>  
+    <title>@ViewBag.Title</title>
+</head>
+<body>   
+    @*@(
+            X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull()))
+        )
+
+
+        @(
+            X.Window().ID("winPopup").Title(Util.GetLangJS("SELBRANCHID"))
+            .Resizable(false)
+            .DefaultButton("btnPopupOk")
+            .Width(350)
+            .Items(
+                HQ.Combo().ID("cboPopupCpny").Name("BranchID").HQLangCodeJS("BranchName")
+                .HQProcedure("OM10100_pcBranch").HQColumnShow("BranchID,BranchName,Addr")
+                .DisplayField("BranchName").ValueField("BranchID")
+                .LabelWidth(100).Width(330).HQHeightWidth(400, 450).MarginSpec("10 0 10 0")
+                .AllowBlank(false).LabelWidth(120)
+                .HQParam(new StoreParameterCollection(){
+                    new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                })
+                .ForceSelection(true)
+                .LoadData()
+
+                .QueryMode(DataLoadMode.Remote)
+                .MatchFieldWidth(false)
+                .ListConfig(
+                    X.BoundList()
+                    .Height(500)
+                    .ItemSelector(".x-boundlist-item")
+                    .LoadingText(Util.GetLangJS("Loading"))
+                    .Tpl(
+                        X.XTemplate()
+                        .Html(@"<tpl for='.'>
+                            <tpl if='[xindex] == 1'>
+                                <table style='table-layout: fixed; max-width:650px !important'>
+                                    <tr>
+                                        <th style='min-width:110px;'>" + Util.GetLangJS("BranchID") + @"</th>
+                                        <th style='min-width:150px;'>" + Util.GetLangJS("BranchName") + @"</th>
+                                        <th>" + Util.GetLangJS("Addr") + @"</th>
+                                    </tr>
+                            </tpl>
+                            <tr class='x-boundlist-item'>
+                                <td>{BranchID}</td>
+                                <td>{BranchName}</td>
+                                <td>{Addr}</td>
+                            </tr>
+                            <tpl if='[xcount-xindex] == 0'>
+                                </table>
+                            </tpl>
+                        </tpl>"
+                                )
+                        )
+                )
+
+            )
+            .Buttons(
+                X.Button().ID("btnPopupOk").Text(Util.GetLangJS("Ok"))
+                .Listeners(p => p.Click.Fn = "btnPopupOk_Click")
+            )
+        )*@
+
+
+</body>
+</html>
+ 

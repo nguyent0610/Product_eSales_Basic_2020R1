@@ -1,0 +1,619 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C866C18-D223-4A10-9C70-291D09E2E17E}</ProjectGuid>
+    <ProjectTypeGuids>{E3E379DF-F4C6-4180-9B81-6769533ABE47};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OM20500</RootNamespace>
+    <AssemblyName>OM20500</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ARProcess">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\ARProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Aspose.Cells, Version=17.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLLHangThuan\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DApp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DApp.dll</HintPath>
+    </Reference>
+    <Reference Include="eBiz4DSys">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\eBiz4DSys.dll</HintPath>
+    </Reference>
+    <Reference Include="Encryption">
+      <HintPath>..\..\..\Process\INProcess\INProcess\bin\Release\Encryption.dll</HintPath>
+    </Reference>
+    <Reference Include="Ext.Net, Version=2.4.0.28524, Culture=neutral, PublicKeyToken=2e12ce3d0176cd87, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\Ext.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Ext.Net.Utilities, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2c34ac34702a3c23, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\Ext.Net.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkyFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLLHangThuan\HQ.eSkyFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="HQ.eSkySys, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\eSky Framework\HQ.eSkyFramework\bin\HQ.eSkySys.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.Common">
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\HQFramework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="HQFramework.DAL, Version=2010.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\OMProcess\OMProcess\bin\Release\HQFramework.DAL.dll</HintPath>
+    </Reference>
+    <Reference Include="INProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Process\INProcess\INProcess\bin\Release\INProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <Private>True</Private>
+      <HintPath>packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OM10100\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="OM10100, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLLPhuThai\OM10100.dll</HintPath>
+    </Reference>
+    <Reference Include="OMProcess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLLHangThuan\OMProcess.dll</HintPath>
+    </Reference>
+    <Reference Include="PO10200, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Hao\20170504\NhuHao\DLLKido\PO10200.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.4.0.20710.0\lib\net40\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.4.0.20710.0\lib\net40\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.4.0.20710.0\lib\net40\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\..\OM40100\bin\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Providers">
+      <HintPath>..\..\OM40100\bin\System.Web.Providers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.2.0.20710.0\lib\net40\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="Transformer.NET, Version=2.1.1.22883, Culture=neutral, PublicKeyToken=e274d618e7c603a7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\OM40100\bin\Transformer.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\..\OM40100\bin\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\..\OM40100\bin\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\OM20500Controller.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ModifyInMemory.cs" />
+    <Compile Include="OM20500Model.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OM20500Model.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Readme\Transformer.NET\LICENSE.txt" />
+    <Content Include="App_Readme\Transformer.NET\README.txt" />
+    <Content Include="Content\ComboXTemplate.css" />
+    <Content Include="Content\extjs.css" />
+    <Content Include="Content\extnet.css" />
+    <Content Include="Content\gridfilter-embedded.css" />
+    <Content Include="Content\hq-theme.css" />
+    <Content Include="Content\hq-theme.min.css" />
+    <Content Include="Content\images\AR30300_Album.png" />
+    <Content Include="Content\images\avatar_placeholder.png" />
+    <Content Include="Content\images\icon\add.png" />
+    <Content Include="Content\images\icon\arrow-button-over.png" />
+    <Content Include="Content\images\icon\arrow-button.png" />
+    <Content Include="Content\images\icon\bookedit.png" />
+    <Content Include="Content\images\icon\calendar-hover.png" />
+    <Content Include="Content\images\icon\calendar.png" />
+    <Content Include="Content\images\icon\check-box-over.png" />
+    <Content Include="Content\images\icon\check-box-sign-over.png" />
+    <Content Include="Content\images\icon\check-box-sign.png" />
+    <Content Include="Content\images\icon\check-box.png" />
+    <Content Include="Content\images\icon\clear-button-over.png" />
+    <Content Include="Content\images\icon\clear-button.png" />
+    <Content Include="Content\images\icon\close-button-over.png" />
+    <Content Include="Content\images\icon\close-button.png" />
+    <Content Include="Content\images\icon\database.png" />
+    <Content Include="Content\images\icon\delete.png" />
+    <Content Include="Content\images\icon\diskette.png" />
+    <Content Include="Content\images\icon\edit.png" />
+    <Content Include="Content\images\icon\eraser.png" />
+    <Content Include="Content\images\icon\first-disabled.png" />
+    <Content Include="Content\images\icon\first.png" />
+    <Content Include="Content\images\icon\high-res\arrow-button-over.png" />
+    <Content Include="Content\images\icon\high-res\arrow-button.png" />
+    <Content Include="Content\images\icon\high-res\calendar-hover.png" />
+    <Content Include="Content\images\icon\high-res\calendar.png" />
+    <Content Include="Content\images\icon\high-res\check-box-over.png" />
+    <Content Include="Content\images\icon\high-res\check-box-sign-over.png" />
+    <Content Include="Content\images\icon\high-res\check-box-sign.png" />
+    <Content Include="Content\images\icon\high-res\check-box.png" />
+    <Content Include="Content\images\icon\high-res\clear-button-over.png" />
+    <Content Include="Content\images\icon\high-res\clear-button.png" />
+    <Content Include="Content\images\icon\high-res\close-button-over.png" />
+    <Content Include="Content\images\icon\high-res\close-button.png" />
+    <Content Include="Content\images\icon\high-res\info.png" />
+    <Content Include="Content\images\icon\high-res\sort-down-over.png" />
+    <Content Include="Content\images\icon\high-res\sort-down.png" />
+    <Content Include="Content\images\icon\high-res\sort-up-over.png" />
+    <Content Include="Content\images\icon\high-res\sort-up.png" />
+    <Content Include="Content\images\icon\high-res\warning.png" />
+    <Content Include="Content\images\icon\info.png" />
+    <Content Include="Content\images\icon\last-disabled.png" />
+    <Content Include="Content\images\icon\last.png" />
+    <Content Include="Content\images\icon\lot.png" />
+    <Content Include="Content\images\icon\magnifier.png" />
+    <Content Include="Content\images\icon\minus.png" />
+    <Content Include="Content\images\icon\next-disabled.png" />
+    <Content Include="Content\images\icon\next.png" />
+    <Content Include="Content\images\icon\plus.png" />
+    <Content Include="Content\images\icon\prev-disabled.png" />
+    <Content Include="Content\images\icon\prev.png" />
+    <Content Include="Content\images\icon\printer.png" />
+    <Content Include="Content\images\icon\question.png" />
+    <Content Include="Content\images\icon\refresh.png" />
+    <Content Include="Content\images\icon\sign-out.png" />
+    <Content Include="Content\images\icon\sort-down-over.png" />
+    <Content Include="Content\images\icon\sort-down.png" />
+    <Content Include="Content\images\icon\sort-up-over.png" />
+    <Content Include="Content\images\icon\sort-up.png" />
+    <Content Include="Content\images\icon\subtract-sign.png" />
+    <Content Include="Content\images\icon\warning.png" />
+    <Content Include="Content\images\icon_bell.png" />
+    <Content Include="Content\images\icon_profile.png" />
+    <Content Include="Content\images\loginbg\login_bg.png" />
+    <Content Include="Content\images\loginbg\login_bg0.png" />
+    <Content Include="Content\images\loginbg\login_bg1.png" />
+    <Content Include="Content\images\loginbg\login_bg2.png" />
+    <Content Include="Content\images\loginbg\login_bg3.png" />
+    <Content Include="Content\images\login_bg.png" />
+    <Content Include="Content\images\login_pattern.png" />
+    <Content Include="Content\images\logo-about.png" />
+    <Content Include="Content\images\logo-aboutOld.png" />
+    <Content Include="Content\images\logo-navigate.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo_HQ.png" />
+    <Content Include="Content\images\Media.png" />
+    <Content Include="Content\images\menu\18.png" />
+    <Content Include="Content\images\menu\aa.png" />
+    <Content Include="Content\images\menu\About.png" />
+    <Content Include="Content\images\menu\ap.png" />
+    <Content Include="Content\images\menu\ar.png" />
+    <Content Include="Content\images\menu\bi.png" />
+    <Content Include="Content\images\menu\bluegrey\grpadm.png" />
+    <Content Include="Content\images\menu\bluegrey\grpbir.png" />
+    <Content Include="Content\images\menu\bluegrey\grpfin.png" />
+    <Content Include="Content\images\menu\bluegrey\grpinf.png" />
+    <Content Include="Content\images\menu\bluegrey\grppin.png" />
+    <Content Include="Content\images\menu\bluegrey\grpsin.png" />
+    <Content Include="Content\images\menu\blue\grpadm.png" />
+    <Content Include="Content\images\menu\blue\grpbir.png" />
+    <Content Include="Content\images\menu\blue\grpfin.png" />
+    <Content Include="Content\images\menu\blue\grpinf.png" />
+    <Content Include="Content\images\menu\blue\grppin.png" />
+    <Content Include="Content\images\menu\blue\grpsin.png" />
+    <Content Include="Content\images\menu\brown\grpadm.png" />
+    <Content Include="Content\images\menu\brown\grpbir.png" />
+    <Content Include="Content\images\menu\brown\grpfin.png" />
+    <Content Include="Content\images\menu\brown\grpinf.png" />
+    <Content Include="Content\images\menu\brown\grppin.png" />
+    <Content Include="Content\images\menu\brown\grpsin.png" />
+    <Content Include="Content\images\menu\ca.png" />
+    <Content Include="Content\images\menu\Calendar.png" />
+    <Content Include="Content\images\menu\catar.png" />
+    <Content Include="Content\images\menu\catAR1.png" />
+    <Content Include="Content\images\menu\catca.png" />
+    <Content Include="Content\images\menu\caten.png" />
+    <Content Include="Content\images\menu\catfavorite.png" />
+    <Content Include="Content\images\menu\catfl.png" />
+    <Content Include="Content\images\menu\catin.png" />
+    <Content Include="Content\images\menu\catL14.png" />
+    <Content Include="Content\images\menu\catmt.png" />
+    <Content Include="Content\images\menu\catnd.png" />
+    <Content Include="Content\images\menu\catom.png" />
+    <Content Include="Content\images\menu\catOM1.png" />
+    <Content Include="Content\images\menu\catOM2.png" />
+    <Content Include="Content\images\menu\catOM3.png" />
+    <Content Include="Content\images\menu\catOM4.png" />
+    <Content Include="Content\images\menu\catOM5.png" />
+    <Content Include="Content\images\menu\catOM6.png" />
+    <Content Include="Content\images\menu\catOM7.png" />
+    <Content Include="Content\images\menu\catOM8.png" />
+    <Content Include="Content\images\menu\catOM9.png" />
+    <Content Include="Content\images\menu\catpl.png" />
+    <Content Include="Content\images\menu\catpo.png" />
+    <Content Include="Content\images\menu\catPO1.png" />
+    <Content Include="Content\images\menu\catpp.png" />
+    <Content Include="Content\images\menu\catpr.png" />
+    <Content Include="Content\images\menu\catqr.png" />
+    <Content Include="Content\images\menu\catrp.png" />
+    <Content Include="Content\images\menu\catRP1.png" />
+    <Content Include="Content\images\menu\catRP10.png" />
+    <Content Include="Content\images\menu\catrp11.png" />
+    <Content Include="Content\images\menu\catRP12.png" />
+    <Content Include="Content\images\menu\catRP13.png" />
+    <Content Include="Content\images\menu\catRP14.png" />
+    <Content Include="Content\images\menu\catRP15.png" />
+    <Content Include="Content\images\menu\catRP16.png" />
+    <Content Include="Content\images\menu\catRP17.png" />
+    <Content Include="Content\images\menu\catRP18.png" />
+    <Content Include="Content\images\menu\catRP19.png" />
+    <Content Include="Content\images\menu\catRP20.png" />
+    <Content Include="Content\images\menu\catRP4.png" />
+    <Content Include="Content\images\menu\catRP5.png" />
+    <Content Include="Content\images\menu\catRP8.png" />
+    <Content Include="Content\images\menu\catSI1.png" />
+    <Content Include="Content\images\menu\catst.png" />
+    <Content Include="Content\images\menu\catta.png" />
+    <Content Include="Content\images\menu\ChangePwd.png" />
+    <Content Include="Content\images\menu\dark\grpadm.png" />
+    <Content Include="Content\images\menu\dark\grpbir.png" />
+    <Content Include="Content\images\menu\dark\grpfin.png" />
+    <Content Include="Content\images\menu\dark\grpinf.png" />
+    <Content Include="Content\images\menu\dark\grppin.png" />
+    <Content Include="Content\images\menu\dark\grpsin.png" />
+    <Content Include="Content\images\menu\DB20100.png" />
+    <Content Include="Content\images\menu\DB20200.png" />
+    <Content Include="Content\images\menu\DB30100.png" />
+    <Content Include="Content\images\menu\DB30200.png" />
+    <Content Include="Content\images\menu\DB30300.png" />
+    <Content Include="Content\images\menu\delete.jpg" />
+    <Content Include="Content\images\menu\excel.png" />
+    <Content Include="Content\images\menu\Export.png" />
+    <Content Include="Content\images\menu\Folder Blue16.png" />
+    <Content Include="Content\images\menu\Folder16.png" />
+    <Content Include="Content\images\menu\green\grpadm.png" />
+    <Content Include="Content\images\menu\green\grpbir.png" />
+    <Content Include="Content\images\menu\green\grpfin.png" />
+    <Content Include="Content\images\menu\green\grpinf.png" />
+    <Content Include="Content\images\menu\green\grppin.png" />
+    <Content Include="Content\images\menu\green\grpsin.png" />
+    <Content Include="Content\images\menu\grey\grpadm.png" />
+    <Content Include="Content\images\menu\grey\grpbir.png" />
+    <Content Include="Content\images\menu\grey\grpfin.png" />
+    <Content Include="Content\images\menu\grey\grpinf.png" />
+    <Content Include="Content\images\menu\grey\grppin.png" />
+    <Content Include="Content\images\menu\grey\grpsin.png" />
+    <Content Include="Content\images\menu\grp2NDMAN.png" />
+    <Content Include="Content\images\menu\grpadm.png" />
+    <Content Include="Content\images\menu\grpbir.png" />
+    <Content Include="Content\images\menu\grpcto.png" />
+    <Content Include="Content\images\menu\grpdbi.png" />
+    <Content Include="Content\images\menu\grpfavorite.png" />
+    <Content Include="Content\images\menu\grpfin.png" />
+    <Content Include="Content\images\menu\grpinf.png" />
+    <Content Include="Content\images\menu\grppin.png" />
+    <Content Include="Content\images\menu\grprptsys.png" />
+    <Content Include="Content\images\menu\grpsin.png" />
+    <Content Include="Content\images\menu\Help.png" />
+    <Content Include="Content\images\menu\if.png" />
+    <Content Include="Content\images\menu\in.png" />
+    <Content Include="Content\images\menu\light\grpadm.png" />
+    <Content Include="Content\images\menu\light\grpbir.png" />
+    <Content Include="Content\images\menu\light\grpfin.png" />
+    <Content Include="Content\images\menu\light\grpinf.png" />
+    <Content Include="Content\images\menu\light\grppin.png" />
+    <Content Include="Content\images\menu\light\grpsin.png" />
+    <Content Include="Content\images\menu\marker.png" />
+    <Content Include="Content\images\menu\om.png" />
+    <Content Include="Content\images\menu\po.png" />
+    <Content Include="Content\images\menu\PrePostFix.jpg" />
+    <Content Include="Content\images\menu\purple\grpadm.png" />
+    <Content Include="Content\images\menu\purple\grpbir.png" />
+    <Content Include="Content\images\menu\purple\grpfin.png" />
+    <Content Include="Content\images\menu\purple\grpinf.png" />
+    <Content Include="Content\images\menu\purple\grppin.png" />
+    <Content Include="Content\images\menu\purple\grpsin.png" />
+    <Content Include="Content\images\menu\R0.png" />
+    <Content Include="Content\images\menu\RE.png" />
+    <Content Include="Content\images\menu\RibAbout.png" />
+    <Content Include="Content\images\menu\RibCalc.png" />
+    <Content Include="Content\images\menu\RibCpny.png" />
+    <Content Include="Content\images\menu\RibDatabase.png" />
+    <Content Include="Content\images\menu\RibExit.png" />
+    <Content Include="Content\images\menu\RibFormStyle.png" />
+    <Content Include="Content\images\menu\RibHelp.png" />
+    <Content Include="Content\images\menu\RibInvc.png" />
+    <Content Include="Content\images\menu\RibLang.png" />
+    <Content Include="Content\images\menu\RibLogout.png" />
+    <Content Include="Content\images\menu\Ribmenu.png" />
+    <Content Include="Content\images\menu\Ribmenugroup.png" />
+    <Content Include="Content\images\menu\RibNews.png" />
+    <Content Include="Content\images\menu\RibOptimize.png" />
+    <Content Include="Content\images\menu\RibPO.png" />
+    <Content Include="Content\images\menu\RibPwd.png" />
+    <Content Include="Content\images\menu\RibQuickSwitch.png" />
+    <Content Include="Content\images\menu\RibReg.png" />
+    <Content Include="Content\images\menu\RibServer.png" />
+    <Content Include="Content\images\menu\RibUser.png" />
+    <Content Include="Content\images\menu\RibUserID.png" />
+    <Content Include="Content\images\menu\RibWrkDate.png" />
+    <Content Include="Content\images\menu\sa.png" />
+    <Content Include="Content\images\menu\Search16.png" />
+    <Content Include="Content\images\menu\si.png" />
+    <Content Include="Content\images\notification-header-bg.png" />
+    <Content Include="Content\images\OM21300\branch.png" />
+    <Content Include="Content\images\OM21300\company.png" />
+    <Content Include="Content\images\OM21300\star_marker.png" />
+    <Content Include="Content\images\Word.jpg" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery.ui.accordion.css" />
+    <Content Include="Content\themes\base\jquery.ui.all.css" />
+    <Content Include="Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Include="Content\themes\base\jquery.ui.base.css" />
+    <Content Include="Content\themes\base\jquery.ui.button.css" />
+    <Content Include="Content\themes\base\jquery.ui.core.css" />
+    <Content Include="Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Include="Content\themes\base\jquery.ui.dialog.css" />
+    <Content Include="Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Include="Content\themes\base\jquery.ui.resizable.css" />
+    <Content Include="Content\themes\base\jquery.ui.selectable.css" />
+    <Content Include="Content\themes\base\jquery.ui.slider.css" />
+    <Content Include="Content\themes\base\jquery.ui.tabs.css" />
+    <Content Include="Content\themes\base\jquery.ui.theme.css" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\minified\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Include="Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Include="extjs.css" />
+    <Content Include="extjs.js" />
+    <Content Include="extnet.css" />
+    <Content Include="extnet.js" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <EntityDeploy Include="OM20500Model.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>OM20500Model.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Content\images\loginbg\Thumbs.db" />
+    <Content Include="Content\images\menu\Thumbs.db" />
+    <Content Include="Content\images\OM21300\Thumbs.db" />
+    <Content Include="Content\images\Thumbs.db" />
+    <Content Include="ExportTemplate\OM20500_Template01.xlsx" />
+    <None Include="Properties\PublishProfiles\localtest.pubxml" />
+    <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="gridfilter-embedded.css" />
+    <Content Include="gridfilter.js" />
+    <Content Include="Images\OM20500\IconSupplier.png" />
+    <Content Include="ProgressBarPager.js" />
+    <Content Include="Scripts\hq.common.debug.js" />
+    <Content Include="Scripts\hq.common.js" />
+    <Content Include="Scripts\hq.language0.js" />
+    <Content Include="Scripts\hq.language1.js" />
+    <Content Include="Scripts\hq.language2.js" />
+    <Content Include="Scripts\hq.language3.js" />
+    <Content Include="Scripts\hq.language4.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.js" />
+    <Content Include="Scripts\jquery-ui-1.8.20.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\knockout-2.1.0.debug.js" />
+    <Content Include="Scripts\knockout-2.1.0.js" />
+    <Content Include="Scripts\modernizr-2.5.3.js" />
+    <Content Include="Scripts\Screen\OM20500.js" />
+    <Content Include="Scripts\Screen\OM20500body.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\OM20500\Body.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\OM20500\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>15273</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:15274/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <UserProperties Reactor_Deploy="0" Reactor_Output="" Reactor_Configuration="Release" Reactor_Project="" Reactor_Commands="" Reactor_Enabled="1" />
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

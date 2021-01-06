@@ -1,0 +1,2186 @@
+﻿@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework
+@using HQ.eSkyFramework.HQControl;
+@using OM20500;
+
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+}
+@(
+ X.Store()
+            .ID("stoChoice")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM10100.Controllers.OM10100Controller.DiscountChoice), "mdlChoice", ""))
+)
+@(
+ X.Store()
+            .ID("stoChoiceHeader")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM10100.Controllers.OM10100Controller.DiscountChoiceHeader), "mdlChoiceHeader", ""))
+)
+@(X.Store().ID("stoDet4Save")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgDet_Result), "mdlDet4Save", ""))
+            .ServerProxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetDet", "OM20500"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "_selOrderNbr", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+            {
+                p.Load.Fn = "Store.stoDet4Save_load";
+            })
+        // Store: stoDet
+)
+
+@(
+ X.Store().ID("stoDoc")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgDoc_Result), "mdlDoc", ""))
+            .ServerProxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetDoc", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.txtSlsperId.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("startDate", "Ext.Date.format(App.dteStartDate.getValue(), 'm-d-Y')", ParameterMode.Raw));
+                ps.Add(new StoreParameter("endDate", "Ext.Date.format(App.dteEndDate.getValue(), 'm-d-Y')", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+            {
+                p.Load.Fn = "Store.stoDoc_load";
+            })
+        // Store: stoDet
+)
+
+@(X.Store().ID("stoHisOrd")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgHistoryOrd_Result), "mdlHisOrd", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetHisOrd", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmOrder.selected.items.length?App.slmOrder.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+            {
+                p.Load.Fn = "Store.stoHisOrd_load";
+                p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+            })
+        // Store: stoHisOrd
+)
+
+@(
+ X.Store().ID("stoHisDet")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgHisDet_Result), "mdlHisDet", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetHisDet", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmHisOrd.selected.items.length?App.slmHisOrd.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+                {
+                    p.Load.Fn = "Store.stoHisDet_load";
+                    p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                })
+        // Store: stoHisDet
+)
+
+@(X.Store().ID("stoImage")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgViewImage_Result), "mdlImage", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetImage", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.frmImage.getRecord().data.BranchID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("custID", "App.frmImage.getRecord().data.CustID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.frmImage.getRecord().data.OrderNbr", ParameterMode.Raw));
+                ps.Add(new StoreParameter("slsperID", "App.frmImage.getRecord().data.SlsPerID", ParameterMode.Raw));
+                ps.Add(new StoreParameter("imgType", "_imageType", ParameterMode.Raw));
+                ps.Add(new StoreParameter("width", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Width:195", ParameterMode.Raw));
+                ps.Add(new StoreParameter("height", "App.cboImageSize.valueModels.length?App.cboImageSize.valueModels[0].data.Height:120", ParameterMode.Raw));
+
+            })
+)
+@(
+ X.Store()
+            .ID("stoItemSite")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500.IN_ItemSite), "mdlItemSite", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetItemSite", "OM20500"))
+                .ActionMethods(action => { action.Read = HttpMethod.POST; })
+                .Reader(X.JsonReader().Root("data")))
+)
+
+@(
+ X.Store()
+            .ID("stoEditDetail")
+            .AutoLoad(false)
+            .Model(
+                X.Model().Fields(
+                    new ModelField() { Name = "LineRef", Type = ModelFieldType.String },
+                    new ModelField() { Name = "DiscType", Type = ModelFieldType.String },
+                    new ModelField() { Name = "Code", Type = ModelFieldType.String },
+                    new ModelField() { Name = "InvtID", Type = ModelFieldType.String },
+                    new ModelField() { Name = "SlsUnit", Type = ModelFieldType.String },
+                    new ModelField() { Name = "Descr", Type = ModelFieldType.String },
+                    new ModelField() { Name = "Qty", Type = ModelFieldType.Float },
+                    new ModelField() { Name = "Edit", Type = ModelFieldType.Boolean },
+                    new ModelField() { Name = "BranchID", Type = ModelFieldType.String },
+                    new ModelField() { Name = "OrderNbr", Type = ModelFieldType.String }
+                ).ID("mdlDetail")
+            )
+)
+
+@(HQ.Store().ID("stoCodeProgram").HQProcedure("OM20500_pcCodeProgram").HQDBSys(false).AutoLoad(true)
+            .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+            }).LoadData())
+@(HQ.Store().ID("stoRole").HQProcedure("OM20500_pdRole").HQDBSys(false).AutoLoad(true)
+            .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw},
+                              new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+            }).LoadData()
+            .Listeners(lst => lst.Load.Fn = "Store.stoRole_load")
+)
+
+
+
+@(X.Store().ID("stoHisOrdCalcPromo")
+            .AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(OM20500_pgHistoryOrdCalcPromo_Result), "mdlHistoryOrdCalcPromo", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetHisOrdCalcPromo", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmOrder.selected.items.length?App.slmOrder.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+            {
+                p.Load.Fn = "Store.stoHisOrdCalcPromo_load";
+                p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+            })
+        // Store: stoHisOrd
+)
+
+@(X.Store().ID("stoHisDetcalcPromo")
+            .AutoLoad(false)
+                    .Model(Util.GenerateModel(typeof(OM20500_pgHisDetCalcPromo_Result), "mdlHisDetCalcPromo", ""))
+            .Proxy(
+                X.AjaxProxy()
+                .Url(Url.Action("GetHisDetCalcPromo", "OM20500")).Timeout(int.MaxValue)
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                ps.Add(new StoreParameter("orderNbr", "App.slmOrderCalcPromo.selected.items.length?App.slmOrderCalcPromo.selected.items[0].data.OrderNbr:''", ParameterMode.Raw));
+                ps.Add(new StoreParameter("id", "App.slmOrderCalcPromo.selected.items.length?App.slmOrderCalcPromo.selected.items[0].data.ID:''", ParameterMode.Raw));
+            })
+            .Listeners(p =>
+                {
+                    p.Load.Fn = "Store.stoHisDetCalcPromo_load";
+                    p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                })
+        // Store: stoHisDet
+)
+
+@(X.Store().ID("stoOrderCheck")
+            .AutoLoad(false)
+            .Model(Util.GenerateModel(typeof(OM20500_pgOrder_Result), "mdlOrderCheck", ""))
+           
+)
+@HQ.Store().ID("stoOM20500_pdIN_Inventory").HQProcedure("OM20500_pdIN_Inventory").HQDBSys(false).HQParam(new StoreParameterCollection() {
+											                            new StoreParameter() { Name = "@UserID", Value ="HQ.userName", Mode = ParameterMode.Raw}
+
+						                            }).LoadData().AutoLoad(true)
+
+@(HQ.Store().ID("stoHasDelivery").HQProcedure("OM20500_pdHasDelivery").HQDBSys(false).AutoLoad(true)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw},
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw},
+                    new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw},
+                    new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                })
+                .Listeners(p =>
+                {
+                    p.Load.Fn = "Store.stoHasDelivery_load";
+                })
+                .LoadData()
+)
+@(
+ Html.X().Viewport().Layout(LayoutType.Fit)
+    .Items(
+        X.FormPanel()
+        .Layout(LayoutType.Border)
+        .ID("frmMain")
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyBorder(5)
+        .DefaultButton("btnLoad")
+        .TopBar(Util.SetupToolbar(tools: new AbstractComponent[]{
+             X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText("Import")
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd).Hidden(true)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";              
+            })  
+            
+            , X.Button().ID("btnUpload").Icon(Icon.BookAdd).Text(Util.GetLangJS("Import"))
+            .Listeners(lst =>{
+                lst.Click.Handler = "Ext.get('btnImport-button-fileInputEl').dom.click();";
+            })
+           , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLangJS("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+            })
+            , X.Button().ID("btnForceCalcPromo") 
+            .Text(Util.GetLangJS("ForceCalcPromo"))
+            .Listeners(p=>{
+                p.Click.Fn = "btnForceCalcPromo_Click";
+            })
+            , X.Button().ID("btnDiscManual") 
+            .Text(Util.GetLangJS("OM20500DiscManual"))
+            .Listeners(p=>{
+                p.Click.Fn = "btnDiscManual_Click";
+            })
+            ,X.Button()
+            .ID("btnDeliveryID")
+            .IconCls("icon-invisible")
+            .Text(Util.GetLangJS("OM20500UpDelivery"))
+            .Listeners(p=>{
+                p.Click.Fn = "btnDeliveryID_Click";
+            })
+        }, buttonHidden: "new,delete,refresh,close,print", isShowNavigationButtons: false, handlerName: "Event.menuClick"))
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 110; })
+        .BottomBar(
+            X.Toolbar()
+            .Items(
+                X.ToolbarFill(),
+                HQ.Label().ID("lblQtyAvail").Width(300).StyleSpec("text-align:right;margin-right: 10px !important;")//.MarginSpec("0 0 0 30")
+            )
+        )
+        .Items(
+            X.Panel().ID("pnlHeader")
+            .Layout(LayoutType.HBox).Region(Region.North)
+            .LayoutConfig(new HBoxLayoutConfig { Align = HBoxAlign.Top }).Border(false)
+            .AutoScroll(true)
+
+            .Items(
+            //FirstColume
+              X.Container().Layout(LayoutType.VBox).MarginSpec("0 0 5 0")
+                .MinWidth(200)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboTerritory").Name("cboTerritory").HQLangCodeJS("TERRITORY").DataIndex("Territory")
+                        .HQProcedure("OM20500_pcTerritory").HQColumnShow("Territory,Descr")
+                        .DisplayField("Descr").ValueField("Territory").AllowBlank(false)
+                        .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .HQAutoLoad(true)
+                        .MultiSelect(true).ForceSelection(false)
+                        .Width(270)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                           new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                            lst.Change.Fn = "Event.Form.cboTerritory_Change";
+                            lst.Collapse.Fn = "Event.Form.cboTerritory_Collapse";
+                            lst.Focus.Handler = "this.forceSelection = true;";
+                            lst.Blur.Fn = "Event.Form.cboTerritory_Bur";
+                            lst.TriggerClick.Fn = "Event.Form.cboTerritory_Click";
+                        })
+
+                    , HQ.Combo().ID("cboState").Name("cboState").DataIndex("State").HQLangCodeJS("STATE")
+                        .HQProcedure("OM20500_pcState").HQColumnShow("State,Descr")
+                        .DisplayField("Descr").ValueField("State")
+                        .HQHeightWidth(400, 300).MarginSpec("5 0 0 0").AllowBlank(false)
+                        .HQAutoLoad(false).Width(270).ForceSelection(false)
+                        .MultiSelect(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.Collapse.Fn = "Event.Form.cboState_Collapse";
+                            lst.Focus.Handler = "this.forceSelection = true;";
+                            lst.Blur.Handler = "this.forceSelection = false;";
+                            lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus = true; this.clearValue();}";
+                            lst.TriggerClick.Fn = "Event.Form.cboState_Click";
+                        })
+
+                    , HQ.Combo().ID("cboDistrict").Name("cboDistrict").DataIndex("District").HQLangCodeJS("DISTRICT")
+                        .HQProcedure("OM20500_pcDistrict").HQColumnShow("District,Name").Hidden(true)
+                        .DisplayField("Name").ValueField("District")
+                        .HQHeightWidth(400, 300).MarginSpec("5 0 0 0")
+                        .MultiSelect(true)
+                        .HQAutoLoad(false).Width(270)
+                        .ForceSelection(true)
+                        .HQParam(new StoreParameterCollection()
+                    {
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@State", Value = "joinParams(App.cboState)", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.Focus.Handler = "this.forceSelection = true;";
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        lst.Change.Fn = "Event.Form.cboDistrict_Change";
+                    })
+                    , HQ.Combo().ID("cboCpnyID").MarginSpec("5 0 0 0")
+                        .Name("cboCpnyID").HQLangCodeJS("CpnyID").HQProcedure("OM20500_pcBranchAllByUser")
+                        .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                        .ForceSelection(true).AllowBlank(false)
+                        .Width(270).HQHeightWidth(400, 300).HQAutoLoad(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@State", Value = "joinParams(App.cboState)"  ,Mode = ParameterMode.Raw},
+                            new StoreParameter( ){ Name = "@Territory", Value = "joinParams(App.cboTerritory)" , Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "Event.Form.cboCpnyID_change";
+                            lst.Expand.Fn = "Event.Form.cboCpnyID_Expand";
+                            lst.Blur.Fn = "Event.Form.cboCpnyID_Blur";
+                        })
+                ) //FirstColmn
+                // Second Column
+               ,X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                .MinWidth(200)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                  
+                    
+                    X.Container().Layout(LayoutType.HBox).Items(
+                        HQ.TextBox().ID("txtSlsperId").HQLangCodeJS("Slsperid").LabelWidth(100).Width(250).ReadOnly(true).Tag("X")
+                        ,HQ.Button().ID("btnFindSlsperId").Icon(Icon.Find).Listeners(l=>l.Click.Fn="btnFindSlsperId_Click")
+                    )
+                    
+                    ,HQ.Combo().ID("cboChannel").MarginSpec("5 0 0 0")
+                        .Name("cboChannel").HQLangCodeJS("OM20500FChannel").HQProcedure("OM20500_pcChannel")
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code")
+                        .ForceSelection(true)
+                        .Width(270).HQHeightWidth(400, 300).HQAutoLoad(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                    , HQ.Combo().ID("cboStatus").MarginSpec("5 0 0 0")
+                        .Name("cboStatus").HQLangCodeJS("STATUS").HQProcedure("OM20500_pcApproveStatus")
+                        .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code")
+                        .MultiSelect(true).AllowBlank(false)
+                        .Width(270).HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw}
+                        })
+                        .LoadData()
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Focus.Handler = "this.forceSelection=true;";
+                        })
+                    ,HQ.Combo().ID("cboRemarkOrd").MarginSpec("5 0 5 0")
+                        .Name("cboRemarkOrd").HQLangCodeJS("OM20500FtRemardOrd").HQProcedure("OM20500_pcRemarkOrdFilterType")
+                        .HQColumnShow("Descr").DisplayField("Descr").ValueField("Code").Hidden(true)
+                        .ForceSelection(true)
+                        .Width(270).HQHeightWidth(400, 300).HQAutoLoad(true)
+                        .HQParam(new StoreParameterCollection()
+                        {
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            lst.Change.Fn = "Event.Form.cboCpnyID_change";
+                        })
+                        ) // Second Column
+        // Third Column
+                    , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                    .MinWidth(200)
+                    .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                    .Items(
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")//.Width(310)
+                        .Items(
+                            HQ.DateField().ID("dteStartDate").AllowBlank(false)
+                                .HQLangCodeJS("FromDate").Value(DateTime.Now).Width(240)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                                })
+                            , X.TimeField().ID("dteStartTime").Width(65).SelectedTime(new TimeSpan(0, 0, 0)).Increment(30).Format("HH:mm")
+                        )
+                        ,
+                        X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                        .Items(
+                            HQ.DateField().ID("dteEndDate").AllowBlank(false)
+                                .HQLangCodeJS("ToDate").Value(DateTime.Now).Width(240)
+                                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                                .Listeners(lst =>
+                                {
+                                    lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                                })
+                            , X.TimeField().ID("dteEndTime").Width(65).Format("HH:mm").Increment(30).SelectedTime(new TimeSpan(23, 59, 0))
+                        )
+
+                        , HQ.Combo().ID("cboDateFilterBy")
+                            .HQColumnShow("Code,Descr").HQLangCodeJS("DateFilter")
+                            .HQProcedure("OM20500_pcDateFilterBy").DisplayField("Descr").ValueField("Code")
+                            .HQHeightWidth(400, 300).ForceSelection(true).HQAutoLoad(true)
+                            .HQValue("C", false)
+                            .HQParam(new StoreParameterCollection() 
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw},
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                    )
+        // Third Column
+                //, X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+                //.MinWidth(200)
+                //.LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                //.Items(
+                   
+
+                    
+
+                    
+                //) // Third Column
+
+                // Forth Column
+                , X.Container().Layout(LayoutType.VBox).MarginSpec("5 5 5 30")
+                .Width(150)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Button().ID("btnLoad")
+                        .HQLangCodeJS("LoadData").Icon(Icon.ArrowRefresh)
+                        .Handler("Event.Form.btnLoad_click").Width(150)
+
+                    , HQ.Button().ID("btnClose")
+                        .Icon(Icon.LockEdit)
+                        .HQLangCodeJS("ClosePO").MarginSpec("5 0 0 0")
+                        .Handler("Event.Form.btnClose_click").Width(150)
+                        
+                    , HQ.Combo().ID("cboCustID")
+                    .HQColumnShow("CustID,RefCustID,Name,Addr1,Addr2").HQLangCodeJS("CustID")
+                    .HQProcedure("OM20500_pcCustomerActive").DisplayField("CustID").ValueField("CustID")
+                    .HQHeightWidth(400, 300).ForceSelection(true).HQAutoLoad(false)
+                    .HQParam(new StoreParameterCollection() 
+                    {
+                        new StoreParameter() { Name = "@Territory", Value = "joinParams(App.cboTerritory)", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@State", Value = "joinParams(App.cboState)", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@District", Value = "joinParams(App.cboDistrict)", Mode = ParameterMode.Raw },
+                        new StoreParameter("@BranchID","App.cboCpnyID.getValue()",ParameterMode.Raw),
+                        new StoreParameter("@UserName","HQ.userName",ParameterMode.Raw)
+                    })
+                    .Hidden(true)
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    })
+                    
+                    , HQ.Button().ID("btnDelOrdNbrImp")
+                    .Icon(Icon.Delete)
+                    .HQLangCodeJS("DelOrdNbrImp").MarginSpec("5 0 0 0")
+                    .Handler("Event.Form.btnDelOrdNbrImp_click").Width(150)
+                ) // Forth Column
+
+            ) // pnlHeader
+
+            , X.Panel().ID("pnlOrder")
+            .Layout(LayoutType.Fit).Region(Region.Center)
+            .Items(
+                X.GridPanel().ID("grdOrder")
+                .Region(Region.Center).Scroll(ScrollMode.Both)
+                .Layout(LayoutType.Fit)
+                .View(
+                    X.GridView().TrackOver(false).EnableTextSelection(true)
+                    .GetRowClass(grc => grc.Fn = "Event.Grid.grdOrder_color")
+                )
+            .SortableColumns(true).Flex(1)
+            .Store(
+                X.Store()
+                .ID("stoOrder")
+                .PageSize(50)
+                .AutoLoad(false)
+                .Model(Util.GenerateModel(typeof(OM20500_pgOrder_Result), "mdlOrder", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("slsperID", "App.txtSlsperId.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("custID", "App.cboCustID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("status", "App.cboStatus.getValue().join(',')", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("startDate", "App.dteStartDate.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("endDate", "App.dteEndDate.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("startTime", "App.dteStartTime.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("endTime", "App.dteEndTime.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("remark", "App.cboRemarkOrd.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("channel", "App.cboChannel.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("dateFilterBy", "App.cboDateFilterBy.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("territory", "joinParams(App.cboTerritory)", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("state", "joinParams(App.cboState)", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("district", "joinParams(App.cboDistrict)", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetOrder")).Timeout(int.MaxValue))
+                .Listeners(p =>
+                {
+                    p.Load.Fn = "Store.stoOrder_load"; 
+                    p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                })
+            )
+
+            .ColumnModel(
+
+                X.RowNumbererColumn().Width(40)
+                , X.CheckColumn()
+                    .HideTitleEl(true).DataIndex("Selected")
+                    .Align(Alignment.Center).ToolTip(Util.GetLangJS("Selected")).Listeners(l => { l.BeforeCheckChange.Fn = "chkSelected_BeforeCheckChange"; })
+                    .Width(35).Editable(true)
+                    .HeaderItems(
+                        HQ.Checkbox().ID("chkSelectHeaderOrder")
+                        .Handler("Event.Grid.chkSelectHeaderOrder_change")
+                    )
+                    
+                , X.CheckColumn()
+                    .DataIndex("ForceCalcPromo")
+                    .Text(Util.GetLangJS("ForceCalcPromo"))
+                    .Width(85).Editable(true)
+
+                , X.Column().DataIndex("CalcPromoOnly").Width(80).Renderer("linkRenderer").Text(Util.GetLangJS("CalcPromo")).ID("btnCalcPromo")                
+
+                , X.ImageCommandColumn().Text(Util.GetLangJS(" ")).Hidden(true)
+                    .Width(30)
+                    .Commands(
+                        Html.X().ImageCommand()
+                            .Icon(Icon.TabEdit)
+                            .ToolTip(t =>
+                            {
+                                t.Text = Util.GetLangJS("EditOM205");
+                            })
+                            .CommandName("EditOM205")
+                    )
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "Event.Form.showEditDetail(record);";
+                    })
+                    
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("OrderNbr")).DataIndex("OrderNbr")
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("CustID")).DataIndex("CustID").Width(120)
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("CustName")).DataIndex("CustName").Width(150)
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("CodeHT")).DataIndex("CodeHT")
+                    .Editor(Html.X().TextField().MaxLength(50).EnforceMaxLength(true))
+
+                , HQ.DateColumn().Renderer("renderOrderDateColor").Format(Current.FormatDate)
+                    .Text(Util.GetLangJS("OrderDate")).DataIndex("OrderDate").Width(150)
+
+                , X.Column().Text(Util.GetLangJS("DeliveryUnit")).DataIndex("DeliveryUnit").Renderer("renderDeliveryUnit").Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboDeliveryUnit").Name("cboDeliveryUnit")
+                        .HQProcedure("OM20500_pcDeliveryUnit").HQColumnShow("Code,Descr")
+                        .DisplayField("Descr").ValueField("Code")
+                        .HQHeightWidth(400, 300)
+                        .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "DeliveryUnit"))
+                        .ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection(){
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Listeners(p =>
+                        {
+                            p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            p.Expand.Fn = "cboDeliveryUnit_Expand";
+                            p.Change.Fn = "cboDeliveryUnit_Change";
+                        })
+                )
+
+                , X.DateColumn().Text(Util.GetLangJS("ShipDate")).DataIndex("ShipDate").Format(Current.FormatDate).Width(150)
+                    .Editor(HQ.DateField().ID("colShipDate"))
+                    
+                , X.Column().Text(Util.GetLangJS("OM20500ShiftID")).DataIndex("ShiftID").Renderer("renderShiftID").Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboShiftID").Name("cboShiftID")
+                        .HQProcedure("OM20500_pcShiftID").HQColumnShow("Code,Descr")
+                        .DisplayField("Descr").ValueField("Code")
+                        .HQHeightWidth(400, 300)
+                        .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "OM20500ShiftID"))
+                        .ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection(){
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Listeners(p =>
+                        {
+                            p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            //p.Expand.Fn = "cboDeliveryUnit_Expand";
+                            //p.Change.Fn = "cboDeliveryUnit_Change";
+                        })
+                )
+                
+                , X.Column().Text(Util.GetLangJS("PayMethod")).DataIndex("PayMethod").Renderer("renderPayMethod").Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboPayMethod").Name("cboPayMethod")
+                        .HQProcedure("OM20500_pcPayMethod").HQColumnShow("Code,Descr")
+                        .DisplayField("Descr").ValueField("Code")
+                        .HQHeightWidth(400, 300)
+                        .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "PayMethod"))
+                        .ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection(){
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                        .Listeners(p =>
+                        {
+                            p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            //p.Expand.Fn = "cboDeliveryUnit_Expand";
+                            //p.Change.Fn = "cboDeliveryUnit_Change";
+                        })
+                )
+                
+                , X.Column().Text(Util.GetLangJS("PayType")).DataIndex("PayType").Renderer("renderPayType").Width(150)
+                .Editor(
+                    HQ.Combo().ID("cboPayType").Name("cboPayType")
+                        .HQProcedure("OM20500_pcPayType").HQColumnShow("Code,Descr")
+                        .DisplayField("Descr").ValueField("Code")
+                        .HQHeightWidth(400, 300)
+                        .AllowBlank(false).BlankText(Util.GetLangPrefix("Select", "PayType"))
+                        .ForceSelection(true)
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .HQParam(new StoreParameterCollection(){
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                            new StoreParameter() { Name = "@PayMethod", Value = "_payMethod", Mode = ParameterMode.Raw}
+                        })
+                        .LoadData()
+                        .Listeners(p =>
+                        {
+                            p.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                )
+                
+                
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("OM20500Remark")).DataIndex("Remark")
+                    
+                //, X.Column().Renderer("renderHeaderColor")
+                //    .Text(Util.GetLangJS("OM20500RemarkKM")).DataIndex("RemarkKM")
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("RemarkOrd")).DataIndex("RemarkOrd")
+                    .Editor(Html.X().TextField().MaxLength(1000).EnforceMaxLength(true))
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("Status")).DataIndex("StatusDescr")//.DataIndex("Status")
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("ClassID")).DataIndex("PriceClassID")
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("Address")).DataIndex("Addr1")
+
+                , X.Column().Text(Util.GetLangJS("District")).DataIndex("DistrictDescr").Renderer("renderHeaderColor")
+
+                , X.Column().Text(Util.GetLangJS("State")).DataIndex("StateDescr").Renderer("renderHeaderColor")
+
+                , X.Column().Renderer("renderHeaderColor")
+                    .Text(Util.GetLangJS("SlsperID")).DataIndex("SlsPerID")
+
+                , X.Column().Text(Util.GetLangJS("Qty")).Hidden(true)
+                .Columns(
+                    X.NumberColumn().Align(Alignment.Right).Width(70)
+                        .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("OrdQty1").Format("0,000").Renderer("renderHeaderNumberColor").Hidden(true)
+
+                    , X.NumberColumn().Align(Alignment.Right).Width(70)
+                        .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("OrdQty2").Format("0,000").Renderer("renderHeaderNumberColor").Hidden(true)
+                )
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor").Hidden(true)
+                    .Text(Util.GetLangJS("Qty")).DataIndex("OrdQty").Format("0,000")
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                    .Text(Util.GetLangJS("LineDiscAmt")).DataIndex("LineDiscAmt").Format("0,000").Width(150)
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                    .Text(Util.GetLangJS("VolDiscAmt")).DataIndex("VolDiscAmt").Format("0,000").Width(150)
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                    .Text(Util.GetLangJS("OM20500OrdDiscAmt")).DataIndex("OrdDiscAmt").Format("0,000").Width(150)
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                    .Text(Util.GetLangJS("LineAmt")).DataIndex("OrdAmt").Format("0,000")
+
+                , X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                    .Text(Util.GetLangJS("TotTax")).DataIndex("TaxTot").Format("0,000")
+
+                //, X.NumberColumn().Align(Alignment.Right).Renderer("renderHeaderNumberColor")
+                //    .Text(Util.GetLangJS("PayAmt")).DataIndex("PayAmt").Format("0,000")
+
+                , X.Column().Text(Util.GetLangJS("InvcNbr")).DataIndex("InvcNbr").Renderer("renderHeaderColor").ID("colInvcNbr")
+                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
+
+                //, X.NumberColumn().Format("0,000").Renderer("renderHeaderNumberColor")
+                //    .Text(Util.GetLangJS("RewardAmt")).DataIndex("RewardAmt4Display").Align(Alignment.Right)
+
+                //, X.Column().Renderer("renderHeaderColor")
+                //    .Text(Util.GetLangJS("RewardID")).DataIndex("RewardID")
+
+                , X.Column().Renderer("renderHeaderColor").ID("colInvcNote")
+                    .Text(Util.GetLangJS("InvcNote")).DataIndex("InvcNote")
+                    .Editor(Html.X().TextField().MaxLength(30).EnforceMaxLength(true))
+
+                , X.ImageCommandColumn().Text(Util.GetLangJS("OM20500ProfilePic"))
+                .Width(150)
+                .Commands(
+                    Html.X().ImageCommand()
+                        .Icon(Icon.ApplicationViewIcons)
+                        .ToolTip(t =>
+                        {
+                            t.Text = Util.GetLangJS("OM20500ProfilePic");
+                        })
+                        .CommandName("ProfilePic")
+                )
+                .Listeners(l =>
+                {
+                    l.Command.Handler = "Event.Form.showImage(record, 0);";
+                })
+
+                //, X.ImageCommandColumn().Text(Util.GetLangJS("OM20500BussRegPic"))
+                //.Width(80)
+                //.Commands(
+                //    Html.X().ImageCommand()
+                //        .Icon(Icon.ApplicationViewIcons)
+                //        .ToolTip(t =>
+                //        {
+                //            t.Text = Util.GetLangJS("OM20500BussRegPic");
+                //        })
+                //        .CommandName("BussRegistrationPic")
+                //)
+                //.Listeners(l =>
+                //{
+                //    l.Command.Handler = "Event.Form.showImage(record, 1);";
+                //})
+                
+                , X.DateColumn().Text(Util.GetLangJS("ApprovalDate")).DataIndex("ApprovalDate").Format(Current.FormatDate + " HH:mm:ss").Renderer("renderDateColor").Width(130)
+                
+                , X.DateColumn().Text(Util.GetLangJS("SyncDate")).DataIndex("SyncDate").Format(Current.FormatDate + " HH:mm:ss").Renderer("renderDateColor").Width(130)
+                
+                , X.DateColumn().Text(Util.GetLangJS("Crtd_DateTime")).DataIndex("CDateTime").Format(Current.FormatDate + " HH:mm:ss").Renderer("renderDateColor").Width(130)
+            )
+            .SelectionModel(
+                X.RowSelectionModel().ID("slmOrder").Mode(SelectionMode.Single)
+                .Listeners(lst =>
+                {
+                    lst.BeforeSelect.Fn = "Event.Grid.slmOrder_BeforeSelect";
+                    lst.Select.Fn = "Event.Grid.slmOrder_select";
+                })
+            )
+            .Listeners(lst =>
+            {
+                lst.CellClick.Fn = "grdOrder_CellClick";
+            })
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.Edit.Fn = "Event.Grid.grdOrder_edit";
+                    ls.ValidateEdit.Fn = "Event.Grid.grdOrder_validateEdit";
+                    ls.BeforeEdit.Fn = "Event.Grid.grdOrder_beforeEdit";
+                })
+            )// grdOrder
+            .BottomBar(
+                X.PagingToolbar().HideRefresh(true)
+                .Items(
+                    X.Label(Util.GetLangJS("PageSize")),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                )
+                .Plugins(X.ProgressBarPager())
+
+            )
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("OrderNbr"),
+                        X.StringFilter().DataIndex("CustID"),
+                        X.StringFilter().DataIndex("CustName"),
+                        X.DateFilter().DataIndex("OrderDate"),
+                        X.StringFilter().DataIndex("Remark"),
+                        X.StringFilter().DataIndex("RemarkOrd"),
+                        X.StringFilter().DataIndex("RemarkKM"),
+                        X.StringFilter().DataIndex("PriceClassID"),
+                        X.StringFilter().DataIndex("Addr1"),
+                        X.StringFilter().DataIndex("DistrictDescr"),
+                        X.StringFilter().DataIndex("StateDescr"),
+                        X.StringFilter().DataIndex("SlsPerID"),
+                        X.StringFilter().DataIndex("StatusDescr"),
+                        X.NumericFilter().DataIndex("OrdQty"),
+                        X.NumericFilter().DataIndex("OrdQty1"),
+                        X.NumericFilter().DataIndex("OrdQty2"),
+                        X.NumericFilter().DataIndex("LineDiscAmt"),
+                        X.NumericFilter().DataIndex("VolDiscAmt"),
+                        X.NumericFilter().DataIndex("OrdDiscAmt"),
+                        X.NumericFilter().DataIndex("OrdAmt"),
+                        X.NumericFilter().DataIndex("TaxTot"),
+                        X.NumericFilter().DataIndex("PayAmt"),
+                        X.StringFilter().DataIndex("InvcNbr"),
+                        X.NumericFilter().DataIndex("RewardAmt4Display"),
+                        X.StringFilter().DataIndex("RewardID"),
+                        X.StringFilter().DataIndex("InvcNote"),
+                        X.StringFilter().DataIndex("CodeHT"),
+                        X.StringFilter().DataIndex("DeliveryUnit").ValidateRecord(p => p.Fn = "stringFilter"),
+                        X.DateFilter().DataIndex("SyncDate"),
+                        X.DateFilter().DataIndex("ApprovalDate"),
+                        X.DateFilter().DataIndex("LDateTime"),
+                        X.DateFilter().DataIndex("CDateTime")
+                    )
+                )
+            )
+
+            , X.TabPanel().ID("tabInfo")
+            .Layout(LayoutType.Border)
+            .Region(Region.South).Flex(2).Split(true)
+            .Listeners(l => l.TabChange.Fn = "tabInfo_TabChange")
+            .Items(
+                X.Panel()
+                .Layout(LayoutType.Fit)
+                .Region(Region.Center)
+                .Title(Util.GetLangJS("OrderPDA"))
+                .Items(
+                    X.GridPanel().ID("grdDet")
+                    .Region(Region.Center).Scroll(ScrollMode.Both)
+                    .Layout(LayoutType.Fit)
+                    .View(X.GridView().TrackOver(false).EnableTextSelection(true))
+                    .SortableColumns(true)
+                        .Store(
+                            X.Store().ID("stoDet")
+                            .PageSize(50).AutoLoad(false)
+                            .Model(Util.GenerateModel(typeof(OM20500_pgDet_Result), "mdlDet", ""))
+                            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                                ps.Add(new StoreParameter("orderNbr", "_selOrderNbr", ParameterMode.Raw));
+                            })
+                            .ServerProxy(X.AjaxProxy().Url(Url.Action("GetDet")))
+                            .Listeners(p =>
+                            {
+                                p.Load.Fn = "Store.stoDet_load";
+                                p.BeforeLoad.Handler = "App.frmMain.mask(); HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                            })
+                        )
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+                        , X.CheckColumn()
+                            .HideTitleEl(true).DataIndex("Selected").Editable(true)
+                            .Align(Alignment.Center).ToolTip(Util.GetLangJS("Selected"))
+                            .Width(40)
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("InvtID")).DataIndex("InvtID").Width(120).Renderer("renderColor")
+
+                        , X.Column()
+                        .Text(Util.GetLangJS("Descr")).DataIndex("Descr").Width(150).Renderer("renderColor")
+
+                        , X.CheckColumn()
+                        .Text(Util.GetLangJS("FreeItem")).DataIndex("FreeItem").Width(70)
+
+                        , X.Column().Text(Util.GetLangJS("OrdQty")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("LineQty1").Format("0,000").Hidden(true)
+
+                            , X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("LineQty2").Format("0,000").Hidden(true)
+                        )
+                        , X.NumberColumn().Align(Alignment.Right).Hidden(true)
+                        .Text(Util.GetLangJS("OrdQty")).DataIndex("LineQty").Format("0,000")
+
+                        , X.Column().Text(Util.GetLangJS("QtyApprove")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("Qty1").Hidden(true)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                                )
+
+                            , X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("Qty2").Hidden(true)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                                )
+                        )
+                        , X.NumberColumn().Format("0,000").Align(Alignment.Right).Hidden(true)
+                            .Text(Util.GetLangJS("QtyApprove")).DataIndex("Qty")
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true).MinValue(0)
+                            )
+
+                        , X.Column().Text(Util.GetLangJS("QtyERP")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("QtyERP1")
+
+                            , X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("QtyERP2")
+                        )
+                        , X.NumberColumn().Format("0,000").Align(Alignment.Right).Hidden(true)
+                            .Text(Util.GetLangJS("QtyERP")).DataIndex("QtyERP")
+
+                        , X.Column().Text(Util.GetLangJS("QtyShipD")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("QtyShipD1")
+
+                            , X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("QtyShipD2")
+                        )
+                        , X.NumberColumn().Format("0,000").Align(Alignment.Right).Hidden(true)
+                            .Text(Util.GetLangJS("QtyShipD")).DataIndex("QtyShipD")
+                        
+                        , X.Column().Text(Util.GetLangJS("ShipQtyActual")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("QtyShip1").Hidden(true)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                    .MinValue(0)
+                                )
+                                
+                            , X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(70).Renderer("renderNumberColor")
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("QtyShip2").Hidden(true)
+                                .Editor(
+                                    HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                    .MinValue(0)
+                                )
+                        )
+                        , X.NumberColumn().Format("0,000").Align(Alignment.Right).Width(120).Hidden(true)
+                            .Text(Util.GetLangJS("ShipQtyActual")).DataIndex("QtyShip")
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                .MinValue(0)
+                            )
+                        , X.Column().Text(Util.GetLangJS("ShippedQty")).Hidden(true)
+                        .Columns(
+                            X.Column().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("QtyShipped1")
+                                
+                            , X.Column().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("QtyShipped2")
+                        )
+                        , X.Column().Align(Alignment.Right).Hidden(true)
+                            .Text(Util.GetLangJS("ShippedQty")).DataIndex("QtyShipped")
+
+                        , X.Column().Hidden(true)
+                            .Text(Util.GetLangJS("Unit")).DataIndex("SlsUnit")
+
+                        , X.NumberColumn().Align(Alignment.Right).Renderer("renderNumberColor")
+                            .Text(Util.GetLangJS("SalesPrice")).DataIndex("SlsPrice").Format("0,000")
+
+                        //, X.NumberColumn().Align(Alignment.Right).Renderer("renderNumberColor")
+                        //    .Text(Util.GetLangJS("DiscPct")).DataIndex("DiscPct").Format("0,000")
+
+                        , X.NumberColumn().Align(Alignment.Right).Renderer("renderNumberColor")
+                            .Text(Util.GetLangJS("DiscAmt")).DataIndex("DiscAmt").Format("0,000")
+                            
+                        , X.NumberColumn().Align(Alignment.Right).Renderer("renderNumberColor").Width(150)
+                            .Text(Util.GetLangJS("OM20500GroupDiscAmt1")).DataIndex("GroupDiscAmt1").Format("0,000")    
+
+                        , X.NumberColumn().Align(Alignment.Right).Renderer("renderNumberColor")
+                            .Text(Util.GetLangJS("LineAmt")).DataIndex("LineAmt").Format("0,000")
+
+                        , X.Column().Renderer("renderColor")
+                            .Text(Util.GetLangJS("DiscCode")).DataIndex("DiscCode")
+
+                        , X.Column().Renderer("renderColor")
+                            .Text(Util.GetLangJS("OM10100DisplayID")).DataIndex("DisplayID")
+
+                        , X.Column().Renderer("renderColor")
+                            .Text(Util.GetLangJS("OM10100PeriodID")).DataIndex("DisplayPeriodID")
+
+                        //, X.Column().Renderer("renderColor")
+                        //    .Text(Util.GetLangJS("OM20500SiteType")).DataIndex("SiteType")
+
+                        , X.Column().Renderer("renderColor")
+                        .Text(Util.GetLangJS("SiteID")).DataIndex("SiteID")
+
+                                                
+                        , X.Column().Renderer("renderColor")
+                            .Text(Util.GetLangJS("TaxID")).DataIndex("TaxID")
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("slmDet").Mode(SelectionMode.Single)
+                        .Listeners(lst => lst.Select.Fn = "Event.Grid.slmDet_select")
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.Edit.Fn = "Event.Grid.grdDet_edit";
+                            ls.ValidateEdit.Fn = "Event.Grid.grdDet_validateEdit";
+                            ls.BeforeEdit.Fn = "Event.Grid.grdDet_beforeEdit";
+                        })
+                    )
+                     .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                            )
+                    )
+                )
+
+                , X.Panel()
+                .ID("tabHist")
+                .Title(Util.GetLangJS("DelivHistory"))
+                .Layout(LayoutType.Border)
+                .Region(Region.Center)
+                .Items(
+                    X.GridPanel().ID("grdHisOrd")
+                    .Region(Region.North).Scroll(ScrollMode.Both)
+                    .SortableColumns(true).Flex(1).Split(true)
+                    .StoreID("stoHisOrd")
+                     .View(X.GridView().TrackOver(false).EnableTextSelection(true))
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+
+                        , X.Column().Text(Util.GetLangJS("OrderNbr")).DataIndex("OrderNbr")
+
+                        , X.Column().Text(Util.GetLangJS("CustID")).DataIndex("CustID").Width(150)
+
+                        , X.Column().Text(Util.GetLangJS("CustName")).DataIndex("CustName").Width(150)
+
+                        , X.Column().Text(Util.GetLangJS("SlsperID")).DataIndex("SlsPerID")
+
+                        , X.Column().Text(Util.GetLangJS("DeliveryID")).DataIndex("DeliveryID")
+
+                        , X.DateColumn().Text(Util.GetLangJS("OrderDate")).DataIndex("OrderDate").Format(Current.FormatDate).Width(150)
+                        
+                        , X.DateColumn().Text(Util.GetLangJS("OM20500ApproveDate")).DataIndex("ApproveDate").Format(Current.FormatDate + " " + Current.FormatTime)
+
+                        , X.DateColumn().Text(Util.GetLangJS("ARDocDate")).DataIndex("ARDocDate").Format(Current.FormatDate).Width(180)
+
+                        , X.Column()
+                        .Text(Util.GetLangJS("Status")).DataIndex("StatusDescr")
+
+                        , X.Column().Text(Util.GetLangJS("OrdQty")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("OrdQty1").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("OrdQty2").Format("0,000")
+                        )
+
+                        , X.NumberColumn().Align(Alignment.Right).Hidden(true)
+                        .Text(Util.GetLangJS("Qty")).DataIndex("OrdQty").Format("0,000")
+
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("LineAmt")).DataIndex("OrdAmt").Format("0,000")
+                        
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("TotTax")).DataIndex("TaxTot").Format("0,000")
+
+                        //, X.NumberColumn().Format("0,000")
+                        //    .Text(Util.GetLangJS("RewardAmt")).DataIndex("RewardAmt").Align(Alignment.Right)
+                            
+                        //, X.Column()
+                        //    .Text(Util.GetLangJS("RewardID")).DataIndex("RewardID")
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("slmHisOrd").Mode(SelectionMode.Single)
+                        .Listeners(lst => lst.Select.Fn = "Event.Grid.slmHisOrd_select")
+                    )// grdHisOrd
+
+                    , X.GridPanel().ID("grdHisDet")
+                    .Region(Region.Center).Scroll(ScrollMode.Both)
+                    .View(X.GridView().TrackOver(false).EnableTextSelection(true))
+                    .SortableColumns(true).Flex(1)
+                    .StoreID("stoHisDet")
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+
+                        , X.Column().Text(Util.GetLangJS("InvtID")).DataIndex("InvtID").Width(120)
+
+                        , X.Column().Text(Util.GetLangJS("Descr")).DataIndex("Descr").Width(150)
+
+                        , X.CheckColumn()
+                            .Text(Util.GetLangJS("FreeItem")).DataIndex("FreeItem")
+                        
+                        , X.Column().Text(Util.GetLangJS("Qty")).Hidden(true)
+                        .Columns(
+                            X.NumberColumn().Align(Alignment.Right).Width(70).Hidden(true)
+                                .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("LineQty1").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right).Width(70).Hidden(true)
+                                .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("LineQty2").Format("0,000")
+                        )
+                        , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("Qty")).DataIndex("LineQty").Format("0,000").Hidden(true)
+                                
+                        , X.Column()
+                            .Text(Util.GetLangJS("Unit")).DataIndex("SlsUnit").Hidden(true)
+
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("SalesPrice")).DataIndex("SlsPrice").Format("0,000")
+                        
+                        //, X.NumberColumn().Align(Alignment.Right)
+                        //    .Text(Util.GetLangJS("DiscPct")).DataIndex("DiscPct").Format("0,000")
+
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("DiscAmt")).DataIndex("DiscAmt").Format("0,000")
+
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("OM20500GroupDiscAmt1")).DataIndex("GroupDiscAmt1").Format("0,000").Width(150)  
+                            
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("LineAmt")).DataIndex("LineAmt").Format("0,000")
+                       
+                        , X.Column()
+                        .Text(Util.GetLangJS("DiscCode")).DataIndex("DiscCode")
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("OM10100DisplayID")).DataIndex("DisplayID")
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("OM10100PeriodID")).DataIndex("DisplayPeriodID")
+                        , X.Column()
+                            .Text(Util.GetLangJS("SiteID")).DataIndex("SiteID")
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("TaxID")).DataIndex("TaxID")
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("slmHisDet").Mode(SelectionMode.Single)
+                    )// grdHisDet
+                )
+                ,X.Panel()
+                .Layout(LayoutType.Fit)
+                .Region(Region.Center)
+                .Title(Util.GetLangJS("OrderPDADoc"))
+                .Items(
+                    X.GridPanel().ID("grdDoc")
+                    .Region(Region.Center).Scroll(ScrollMode.Both)
+                    .Layout(LayoutType.Fit)
+                    .View(
+                        X.GridView().TrackOver(false).EnableTextSelection(true)
+                            .GetRowClass(grc => grc.Fn = "Event.Grid.grdDoc_color")
+                    )
+                    .SortableColumns(true)
+                    .StoreID("stoDoc")
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(40)
+                       
+                        , X.Column()
+                            .Text(Util.GetLangJS("DocNbr")).DataIndex("DocNbr")
+                            .Width(140)
+
+                        , X.NumberColumn().Align(Alignment.Right)
+                            .Text(Util.GetLangJS("DocBal")).DataIndex("DocBal").Format("0,000").Width(130)
+
+                        , X.NumberColumn().Align(Alignment.Right).Width(150)
+                            .Text(Util.GetLangJS("DocBalApproved")).DataIndex("DocBalApproved").Format("0,000")
+                            .Editor(
+                                HQ.NumberField().DecimalPrecision(0).SelectOnFocus(true)
+                                .MinValue(0)
+                            )
+
+                        , X.NumberColumn().Align(Alignment.Right).Width(130)
+                            .Text(Util.GetLangJS("DocBalPay")).DataIndex("DocBalPay").Format("0,000")
+                    )
+                    .SelectionModel(
+                        X.RowSelectionModel().ID("slmDoc").Mode(SelectionMode.Single)
+                        .Listeners(lst => lst.Select.Fn = "Event.Grid.slmDoc_select")
+                    )
+                    .Plugins(
+                        X.CellEditing()
+                        .ClicksToEdit(1)
+                        .Listeners(ls =>
+                        {
+                            ls.Edit.Fn = "Event.Grid.grdDoc_edit";
+                            ls.ValidateEdit.Fn = "Event.Grid.grdDoc_validateEdit";
+                            ls.BeforeEdit.Fn = "Event.Grid.grdDoc_beforeEdit";
+                        })
+                    )// grdDet
+                     .Features(
+                        X.GridFilters()
+                            .Local(true)
+                            .Filters(
+                                X.ListFilter().DataIndex("OrdNbr")
+                            )
+                    )
+                )
+
+                , X.Panel()
+                    .ID("tabHistCalcPromo")
+                    .Title(Util.GetLangJS("CalcPromoHistory"))
+                    .Layout(LayoutType.Border)
+                    .Region(Region.Center)
+                    .Items(
+                        X.GridPanel().ID("grdHisOrdCalcPromo")
+                        .Region(Region.North).Scroll(ScrollMode.Both)
+                        .SortableColumns(true).Flex(1).Split(true)
+                        .StoreID("stoHisOrdCalcPromo")
+                        .View(
+                            X.GridView().TrackOver(false).EnableTextSelection(true)
+                            .GetRowClass(grc => grc.Fn = "grdHisOrdCalcPromo_color")
+                        )
+                        .ColumnModel(
+                            X.RowNumbererColumn().Width(40)
+                            
+                            , X.CheckColumn()
+                                .DataIndex("SelOrder")
+                                .Text(Util.GetLangJS("ApprovalOrder"))
+                                .Width(150).Editable(true)
+
+                            , X.Column().Text(Util.GetLangJS("OrderNbr")).DataIndex("OrderNbr")
+
+                            , X.Column().Text(Util.GetLangJS("CustID")).DataIndex("CustID").Width(120)
+
+                            , X.Column().Text(Util.GetLangJS("CustName")).DataIndex("CustName").Width(120)
+
+                            , X.Column().Text(Util.GetLangJS("SlsperID")).DataIndex("SlsPerID")
+
+                            , X.Column().Text(Util.GetLangJS("DeliveryID")).DataIndex("DeliveryID")
+
+                            , X.DateColumn().Text(Util.GetLangJS("OrderDate")).DataIndex("OrderDate").Format(Current.FormatDate).Width(120)
+
+                            , X.DateColumn().Text(Util.GetLangJS("ARDocDate")).DataIndex("ARDocDate").Format(Current.FormatDate).Width(120)
+
+                            , X.Column().Text(Util.GetLangJS("Status")).DataIndex("StatusDescr")
+
+                            , X.Column().Text(Util.GetLangJS("OrdQty")).Hidden(true)
+                            .Columns(
+                                X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                    .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("OrdQty1").Format("0,000")
+
+                                , X.NumberColumn().Align(Alignment.Right).Width(70).Renderer("renderNumberColor").Hidden(true)
+                                    .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("OrdQty2").Format("0,000")
+                            )
+
+                            , X.NumberColumn().Align(Alignment.Right).Hidden(true)
+                                .Text(Util.GetLangJS("Qty")).DataIndex("OrdQty").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("LineDiscAmt")).DataIndex("LineDiscAmt").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("OrdDiscAmt")).DataIndex("OrdDiscAmt").Format("0,000").Width(120)
+                                
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLangJS("LineAmt")).DataIndex("OrdAmt").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right).Text(Util.GetLangJS("TotTax")).DataIndex("TaxTot").Format("0,000").Width(120)
+
+                            , X.NumberColumn().Format("0,000").Text(Util.GetLangJS("RewardAmt")).DataIndex("RewardAmt").Align(Alignment.Right).Width(150)
+                            
+                            , X.Column().Text(Util.GetLangJS("RewardID")).DataIndex("RewardID")
+
+                            , X.DateColumn().Text(Util.GetLangJS("OM20500DateCalc")).DataIndex("DateCalc").Format(Current.FormatDate + " HH:mm:ss").Width(130)
+                        )
+                        
+                            .SelectionModel(
+                                X.RowSelectionModel().ID("slmOrderCalcPromo").Mode(SelectionMode.Single)
+                                .Listeners(lst => lst.Select.Fn = "Event.Grid.slmOrderCalcPromo_select")
+                            )
+                        .Listeners(lst =>
+                        {
+                            lst.CellClick.Fn = "grdHisOrdCalcPromo_CellClick";
+                        })
+                        .Plugins(
+                            X.CellEditing()
+                            .ClicksToEdit(1)
+                            .Listeners(ls =>
+                            {
+                                ls.BeforeEdit.Fn = "grdHisOrdCalcPromo_beforeEdit";
+                                ls.ValidateEdit.Fn = "grdHisOrdCalcPromo_ValidateEdit";
+                            })
+                        )
+                        // grdHisOrdCalcPromo
+
+                        , X.GridPanel().ID("grdHisDetCalcPromo")
+                        .Region(Region.Center).Scroll(ScrollMode.Both)
+                        .View(X.GridView().TrackOver(false).EnableTextSelection(true))
+                        .SortableColumns(true).Flex(1)
+                        .StoreID("stoHisDetcalcPromo")
+                        .ColumnModel(
+                            X.RowNumbererColumn().Width(40)
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("InvtID")).DataIndex("InvtID").Width(120)
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("Descr")).DataIndex("Descr").Width(150)
+
+                            , X.CheckColumn()
+                                .Text(Util.GetLangJS("FreeItem")).DataIndex("FreeItem")
+
+                            , X.Column().Text(Util.GetLangJS("Qty")).Hidden(true)
+                            .Columns(
+                                X.NumberColumn().Align(Alignment.Right).Width(70).Hidden(true)
+                                    .Text(Util.GetLangJS("OM20500SOUnit")).DataIndex("LineQty1").Format("0,000")
+
+                                , X.NumberColumn().Align(Alignment.Right).Width(70).Hidden(true)
+                                    .Text(Util.GetLangJS("OM20500StkUnit")).DataIndex("LineQty2").Format("0,000")
+                            )
+                            , X.NumberColumn().Align(Alignment.Right)
+                                    .Text(Util.GetLangJS("Qty")).DataIndex("LineQty").Format("0,000").Hidden(true)
+                            , X.Column()
+                                .Text(Util.GetLangJS("Unit")).DataIndex("SlsUnit").Hidden(true)
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("SalesPrice")).DataIndex("SlsPrice").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("DiscPct")).DataIndex("DiscPct").Format("0,000.00")
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("DiscAmt")).DataIndex("DiscAmt").Format("0,000")
+
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("DocDiscAmt")).DataIndex("SumDiscInvoice").Format("0,000")
+                                
+                            , X.NumberColumn().Align(Alignment.Right)
+                                .Text(Util.GetLangJS("LineAmt")).DataIndex("LineAmt").Format("0,000")
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("DiscCode")).DataIndex("DiscCode")
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("OM10100DisplayID")).DataIndex("DisplayID")
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("OM10100PeriodID")).DataIndex("DisplayPeriodID")
+                            
+                            , X.Column()
+                                    .Text(Util.GetLangJS("OM20500SiteType")).DataIndex("SiteID").ID("colDetSiteType")
+
+                            , X.Column()
+                                .Text(Util.GetLangJS("TaxID")).DataIndex("TaxID")
+                        )
+                        .SelectionModel(
+                            X.RowSelectionModel().ID("slmHisDetCalcPromo").Mode(SelectionMode.Single)
+                        )// grdHisDet
+                    )
+            ) // tabInfo
+        )
+        .Listeners(lst =>
+        {
+            lst.BoxReady.Fn = "Event.Form.frmMain_boxReady";
+        })// Form: frmMain
+
+        , X.Window()
+        .ID("winChoice")
+        .Hidden(true)
+        .Layout(LayoutType.Border)
+        .Height(500)
+        .Width(900)
+        .Modal(true)
+        .Closable(true)
+        .Listeners(p =>
+        {
+            p.Hide.Fn = "winChoice_Close";
+            p.Close.Fn = "winChoice_Close";
+        })       
+        .BottomBar(
+            X.Toolbar().ID("bottomBar")
+            .Border(false)
+            .Items(
+                X.Container().ID("ctnBottomBar")
+                .Items(
+                    X.Label().ID("lblChoiceAmtUsed").MarginSpec("0 0 0 5").StyleSpec("style='float: left;width: 300px;font-weight: bold;'")
+
+                    , X.Button().ID("btnChoiceOk").Text(Util.GetLangJS("OK"))
+                        .Listeners(p => p.Click.Fn = "btnChoiceOk_Click")
+                        .StyleSpec("style='float: right;width: 100px;font-weight: bold; margin-right: 10px;'")
+                )
+            )
+        )
+        .Items(
+            X.Panel()
+            .Border(false)
+            .Flex(5)
+            .Region(Region.North)
+            .Layout(LayoutType.Fit)
+            .Items(
+                X.GridPanel().ID("grdChoiceHeader")
+                .Title(Util.GetLangJS("OM10100ChoiceHeader"))
+                .Border(true).BorderSpec("1 0 0 0")
+                .StoreID("stoChoiceHeader")
+                .ColumnModel(
+                    X.RowNumbererColumn()
+                    , X.Column().DataIndex("DiscID").Text(Util.GetLangJS("DiscID")).Width(100)
+                    
+                    , X.Column().DataIndex("DiscSeq").Text(Util.GetLangJS("DiscSeq")).Width(100)
+                    
+                    , X.Column().DataIndex("DiscDescr").Text(Util.GetLangJS("DiscDescr")).Width(200)
+                    
+                    , X.NumberColumn().DataIndex("MaxQty").Text(Util.GetLangJS("OM10100MaxQty")).Width(110).Align(Alignment.Right).Format("0,000").Renderer("rendererMaxQty")
+                    
+                    , X.NumberColumn().DataIndex("PromoBonusAmt").Text(Util.GetLangJS("OM10100PromoAmt")).Width(110).Align(Alignment.Right).Format("0,000").Hidden(true).Hideable(false)
+                    
+                    , X.NumberColumn().DataIndex("LevelID").Text(Util.GetLangJS("OM10100LevelID")).Width(70).Format("0,000")
+                    
+                    , X.Column().DataIndex("InvtID").Text(Util.GetLangJS("InvtID")).Width(120)
+                    
+                    , X.Column().DataIndex("Descr").Text(Util.GetLangJS("Descr")).Width(120)
+                    
+                    , X.Column().DataIndex("Unit").Text(Util.GetLangJS("Unit")).Width(70)
+                    
+                    , X.CheckColumn().DataIndex("DonateGroupProduct").Text(Util.GetLangJS("DonateGroupProduct")).Width(150).Hidden(true).Hideable(false)
+                )
+                .SelectionModel(Html.X().RowSelectionModel().ID("smlChoiceHeader").Mode(SelectionMode.Single))
+                .View(X.GridView().TrackOver(false))
+                .Listeners(p =>
+                {
+                    p.SelectionChange.Fn = "grdChoiceHeader_SelectionChange";
+                })
+            ),
+
+            X.Panel()
+            .Border(false)
+            .Flex(4)
+            .Region(Region.Center)
+            .Layout(LayoutType.Fit)
+            .Items(
+                X.GridPanel().ID("grdChoice")
+                .Title(Util.GetLangJS("OM10100ChoiceDet"))
+                .Border(true).BorderSpec("1 0 0 0")
+                .StoreID("stoChoice")
+                .ColumnModel(
+                    X.RowNumbererColumn()
+                    
+                    , X.CheckColumn().ID("colSel").DataIndex("Sel").Text("").Width(30).Editable(true).Filterable(false)
+                    
+                    , X.Column().DataIndex("FreeItemID").Text(Util.GetLangJS("FreeItemID")).Width(110)
+                    
+                    , X.Column().DataIndex("FreeItemDescr").Text(Util.GetLangJS("FreeItemDescr")).Width(180)
+                    
+                    , X.Column().DataIndex("FreeItemUnit").Text(Util.GetLangJS("FreeItemUnit")).Width(100)
+                    
+                    , X.NumberColumn().DataIndex("FreeItemQty").Text(Util.GetLangJS("SOSUAT")).ID("txtFreeItemQty")
+                        .Width(100)
+                        .Align(Alignment.Right).Format("0,000")
+                        .Editor(HQ.NumberField().MinValue(0).DecimalPrecision(0).SpinUpEnabled(true))
+
+                    , X.Column().DataIndex("MaxQtyInGroup").Text(Util.GetLangJS("MaxQtyInGroup")).Align(Alignment.Right).ID("txtMaxQtyInGroup")
+                    
+                    , X.NumberColumn().DataIndex("FreeItemQtyBase").Text(Util.GetLangJS("FreeItemQtyBase")).Align(Alignment.Right).Format("0,000")
+                    
+                    , X.NumberColumn().DataIndex("TotQty").Text(Util.GetLangJS("FreeItemQty")).Align(Alignment.Right).Format("0,000")
+                    
+                    , X.Column().DataIndex("GroupItem").Text(Util.GetLangJS("GroupItem"))
+                    
+                    , X.NumberColumn().DataIndex("Priority").Text(Util.GetLangJS("Priority")).Align(Alignment.Right)
+                    
+                    , X.NumberColumn().DataIndex("PromoPrice").Text(Util.GetLangJS("OM10100PromoPrice")).Align(Alignment.Right).Format("0,000")
+                    
+                    , X.NumberColumn().DataIndex("PromoLineAmt").Text(Util.GetLangJS("OM10100PromoLineAmt")).Align(Alignment.Right).Format("0,000")
+                )
+                .Listeners(p =>
+                {
+                    p.ValidateEdit.Fn = "grdChoice_ValidateEdit";
+                    p.Edit.Fn = "grdChoice_Edit";
+                })
+                .SelectionModel(Html.X().RowSelectionModel().ID("smlChoice").Mode(SelectionMode.Single))
+                .View(X.GridView().TrackOver(false))
+                .SortableColumns(true)
+                .Plugins(
+                    X.CellEditing().ClicksToEdit(1)
+                )
+            )
+        )
+
+        ,
+        X.Window()
+        .ID("winOrder")
+        .Hidden(true)
+        .Modal(true)
+        .Closable(false)
+        .Title(Util.GetLangJS("OM205Order"))
+        .Height(200)
+        .DefaultButton("btnOK")
+        .Width(400)
+        .Items(
+           X.Container().Layout(LayoutType.VBox).Margins("5 0 5 0").Width(350)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboDelivery").LabelWidth(150).Margins("5 0 0 0")
+                        .Name("Delivery").HQLangCodeJS("OM20500Delivery").HQProcedure("OM20500_pcDeliveryPerson")
+                        .HQColumnShow("SlsperID,Name").DisplayField("Name").ValueField("SlsperID")
+                        .ForceSelection(true)
+                        .Width(300).HQHeightWidth(400, 300).HQAutoLoad(false)
+                        .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                ,new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
+                            })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        
+                    , HQ.DateField().ID("dteShipDate").Name("dteShipDate").LabelWidth(150).AllowBlank(false)
+                        .HQLangCodeJS("ShipDate")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                        })
+                        
+                    , HQ.DateField().ID("dteARDocDate").Name("dteARDocDate").LabelWidth(150).AllowBlank(false)
+                        .HQLangCodeJS("ARDocDate")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                        })
+                        
+                    ,HQ.Checkbox().ID("chkAddStock").HQLangCodeJS("OM205AddStock").Margins("0 0 0 155").Hidden(true)
+                )
+                , X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                        HQ.Button().ID("btnOK")
+                            .HQLangCodeJS("btnOK")
+                            .Handler("Event.Popup.btnOK_click").Width(95).Margins("0 0 0 155")
+                        , HQ.Button().ID("btnCancel").Width(95)
+                            .HQLangCodeJS("btnCancel").Margins("0 0 0 5")
+                            .Handler("Event.Popup.btnCancel_click")
+                    )
+        )
+        
+        ,
+        X.Window()
+        .ID("winOrderSave")
+        .Hidden(true)
+        .Modal(true)
+        .Closable(false)
+        .Title(Util.GetLangJS("OM205Order"))
+        .Height(200)
+        .DefaultButton("btnOK")
+        .Width(400)
+        .Items(
+           X.Container().Layout(LayoutType.VBox).Margins("5 0 5 0").Width(350)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch })
+                .Items(
+                    HQ.Combo().ID("cboDeliverySave").LabelWidth(150).Margins("5 0 0 0")
+                        .Name("DeliverySave").HQLangCodeJS("OM20500Delivery").HQProcedure("OM20500_pcDeliveryPerson")
+                        .HQColumnShow("SlsperID,Name").DisplayField("Name").ValueField("SlsperID")
+                        .ForceSelection(true)
+                        .Width(300).HQHeightWidth(400, 300).HQAutoLoad(false)
+                        .HQParam(new StoreParameterCollection()
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                                ,new StoreParameter() { Name = "@BranchID", Value = "App.cboCpnyID.getValue()", Mode = ParameterMode.Raw }
+                            })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                        })
+                        
+                    , HQ.DateField().ID("dteShipDateSave").Name("dteShipDateSave").LabelWidth(150).AllowBlank(false)
+                        .HQLangCodeJS("ShipDate")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                        })
+                        
+                    , HQ.DateField().ID("dteARDocDateSave").Name("dteARDocDateSave").LabelWidth(150).AllowBlank(false)
+                        .HQLangCodeJS("ARDocDate")
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                        {
+                            lst.TriggerClick.Handler = "if (index == 0) { this.setValue('');}";
+                        })
+                        
+                )
+                , X.Container().Layout(LayoutType.HBox)
+                    .Items(
+                        HQ.Button().ID("btnOKSave")
+                            .HQLangCodeJS("btnOK")
+                            .Handler("Event.Popup.btnOKSave_click").Width(95).Margins("0 0 0 155")
+                        , HQ.Button().ID("btnCancelSave").Width(95)
+                            .HQLangCodeJS("btnCancel").Margins("0 0 0 5")
+                            .Handler("Event.Popup.btnCancelSave_click")
+                    )
+        )
+    )
+)
+
+
+
+
+@(X.Window()
+        .ID("winDetail")
+        .Hidden(true)
+        .Title(Util.GetLangJS("Gift"))
+        .Layout(LayoutType.Anchor)
+        .Height(400)
+        .Width(650)
+        .Modal(true)
+        .Closable(true)
+        .Buttons(
+            X.Button().ID("btnAddnew").Text(Util.GetLangJS("Addnew"))
+                .Listeners(p => p.Click.Fn = "PopupwinDetail.btnAddnew_Click")
+                
+            , X.Button().ID("btnDelete").Text(Util.GetLangJS("Delete"))
+                .Listeners(p => p.Click.Fn = "PopupwinDetail.btnDelete_Click")
+                
+            , X.Button().ID("btnDetailOk").Text(Util.GetLangJS("OK"))
+                .Listeners(p => p.Click.Fn = "PopupwinDetail.btnDetailOK_Click")
+        )
+        .Items(
+            HQ.TextBox().ID("txtOrderNbr").HQLangCodeJS("OrderNbr")
+                .LabelWidth(80).MarginSpec("5 0 5 50").ReadOnly(true).Tag("X")
+                .SubmitValue(false)
+                
+            , X.GridPanel().ID("grdDetail")
+            .Border(false).Anchor("100% -35")
+            .StoreID("stoEditDetail")
+            .ColumnModel(
+                X.RowNumbererColumn().Renderer("PopupwinDetail.renderRowNumberDetail")
+
+                , X.Column().DataIndex("DiscType").Text(Util.GetLangJS("DiscType")).Width(120).Renderer("renderDiscType")
+                .Editor(HQ.Combo().ID("cboDiscType").Name("DiscType").HideLabel(true).LabelWidth(0)
+                    .HQDBSys(false).HQProcedure("OM20500_pcDiscType").ForceSelection(true)
+                    .HQColumnShow("Descr")
+                    .DisplayField("Descr")
+                    .ValueField("Code")
+                    .HQHeightWidth(400, 300)
+                    .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                        })
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst => { lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; })
+                    .LoadData()
+                )
+
+                , X.Column().DataIndex("Code").Text(Util.GetLangJS("CodeProgram")).Width(120).Renderer("renderCodeProgram")
+                    .Editor(HQ.Combo().ID("cboCode").Name("Code").HideLabel(true).LabelWidth(0)
+                        .HQDBSys(false).HQProcedure("OM20500_pcCodeProgram").ForceSelection(true)
+                        .HQColumnShow("Code,Descr")
+                        .DisplayField("Descr")
+                        .ValueField("Code")
+                        .HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                                lst.Expand.Fn = "PopupwinDetail.cboCode_expand";
+                            })
+                        .LoadData()
+                    )
+                    
+                , X.Column().DataIndex("InvtID").Text(Util.GetLangJS("InvtID")).Width(120)
+                    .Editor(HQ.Combo().ID("cboInvtID").Name("InvtID").HideLabel(true).LabelWidth(0)
+                        .HQDBSys(false).HQProcedure("OM20500_pcInvtID").ForceSelection(true)
+                        .HQColumnShow("InvtID,Descr")
+                        .DisplayField("InvtID")
+                        .ValueField("InvtID")
+                        .HQHeightWidth(400, 300)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw},
+                            new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                        })
+                        .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                        .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                            })
+                        .LoadData()
+                    )
+                    
+                , X.Column().DataIndex("Descr").Text(Util.GetLangJS("GiftName")).Width(120).Renderer("renderInvtID")                
+
+                , X.NumberColumn().Format("##,###").DataIndex("Qty").Text(Util.GetLangJS("Qty")).Width(100).Align(Alignment.Right)
+                .Editor(Html.X().NumberField().MaxValue(10000).MinValue(0).DecimalPrecision(0))
+
+            )
+            .SelectionModel(Html.X().RowSelectionModel().ID("smlDetail").Mode(SelectionMode.Single))
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "PopupwinDetail.grdDetail_beforeEdit";
+                    ls.ValidateEdit.Fn = "PopupwinDetail.grdDetail_validateEdit";
+                })
+            )
+            .View(X.GridView().TrackOver(false).GetRowClass(p => p.Fn = "PopupwinDetail.grdDetail_RowClass"))
+        )
+)
+
+
+@(
+ X.Window().ID("winImage")
+    .Title(Util.GetLangJS(""))
+    .Icon(Icon.ApplicationViewGallery).Layout(LayoutType.Fit)
+    .Hidden(true)//.Maximizable(true)
+    .Height(500)
+    .Width(700)
+    .Modal(true)
+    .Items(
+        X.FormPanel().ID("frmImage")
+        .Layout(LayoutType.Border)
+        .TrackResetOnLoad(true)
+        .DefaultAnchor("100%")
+        .BodyPadding(5)
+        .BodyBorder(0)
+        .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 100; })
+        .Items(
+            X.Panel().Region(Region.Center)
+            .Layout(LayoutType.Border)
+            .Cls("images-view")
+                .TopBar(
+                    X.Toolbar().Items(
+                        HQ.Combo().ID("cboImageSize")
+                            .HQLangCodeJS("ImageSize").HQProcedure("OM20500_pcImageSize")
+                            .HQColumnShow("Code,Descr,Width,Height").HQHeightWidth(400, 300)
+                            .ValueField("Code").DisplayField("Descr").Editable(false)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter("@UserName", "HQ.userName", ParameterMode.Raw)
+                                , new StoreParameter("@CpnyID", "HQ.cpnyID", ParameterMode.Raw)
+                                , new StoreParameter("@LangID", "HQ.langID", ParameterMode.Raw)
+                            })
+                            .LoadData()
+                            .Listeners(ls => ls.Change.Handler = "App.stoImage.reload()")
+                    )
+                )
+            .Items(
+                Html.X().DataView()
+                .ID("grdImage")
+                .StoreID("stoImage")
+                .OverItemCls("x-item-over")
+                .ItemSelector("div.thumb-wrap")
+                .EmptyText("No images to display")
+                .TrackOver(true).AutoScroll(true)
+                .Tpl(
+                    Html.X().XTemplate()
+                        .Html(
+                            @<text>
+                                <tpl for=".">
+                                    <tpl if="ImageSrc!=&quot;&quot;">
+                                        <div class="thumb-wrap" id="{ImageName}">
+                                            <div class="thumb"><a target="_blank" href="{ImageName}">{ImageSrc}</a></div>
+                                            <span class="x-editable">{Descr}</span>
+                                        </div>
+                                    </tpl>
+                                </tpl>
+                                <div class="x-clear"></div>
+                            </text>
+                        )
+                    )
+                )                
+            )// FormPanel: frmChoose
+        )
+        .Listeners(ls =>
+        {
+            ls.Close.Handler = "App.grdImage.store.removeAll();";
+        })// Window: winRef
+)
+
+
+@(
+X.Window().ID("winSlsperID").Title(Util.GetLangJS("SearchSlsperID")).Hidden(true).Closable(false)
+        .MinWidth(350).MinHeight(250)
+        .Width(650).Height(450)
+        .Layout(LayoutType.Border)
+        .Layout(LayoutType.Fit)      
+        .Listeners(l => {
+            l.BeforeShow.Handler = "App.frmMain.mask();";
+            l.BeforeHide.Handler = "App.frmMain.unmask();";
+            l.BeforeClose.Handler = "App.frmMain.unmask();";
+        })
+        .Buttons(
+            X.Button().ID("btnCancelSlsperID").Text(Util.GetLangJS("Exit"))
+                .Listeners(p => p.Click.Fn = "btnCancelSlsperID_Click")
+            , X.Button().ID("btnOKSlsperID").Text(Util.GetLangJS("OK"))
+                .Listeners(p => p.Click.Fn = "btnOKSlsperID_Click")
+        )
+        .Items(
+            X.FormPanel()
+            .Layout(LayoutType.Border)
+            .DefaultButton("btnSearch")
+            .FieldDefaults(act => { act.LabelAlign = LabelAlign.Right; act.LabelWidth = 150; })
+            .Items(                       
+                X.Container().Region(Region.Center).Layout(LayoutType.HBox).MarginSpec("5 0 5 0").Region(Region.North)
+                .Items(
+                        HQ.Combo().ID("cboSlsTerritory").Name("cboSlsTerritory").HQLangCodeJS("TERRITORY").DataIndex("Territory")
+                            .HQProcedure("OM20500_pcTerritory").HQColumnShow("Territory,Descr")
+                            .DisplayField("Descr").ValueField("Territory")
+                            .HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+                            .HQAutoLoad(true)
+                            .MultiSelect(true)
+                            .Width(350)
+                            .HQParam(new StoreParameterCollection() 
+                            {
+                                new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                                new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw }   
+                            })
+                            .LoadData()
+                            .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                            .Listeners(lst =>
+                            {
+                                lst.TriggerClick.Handler = "if (index == 0) { this.hasFocus; this.clearValue();}";
+                            })
+                        
+                        ,  HQ.Button().ID("btnSearch").HQLangCodeJS("Search").Listeners(p => p.Click.Handler = "App.stoSlsperID.reload()").MarginSpec("5 0 5 5")
+                            .Icon(Icon.Find)
+                    
+                )
+                , X.Container().Region(Region.Center).Layout(LayoutType.Fit)
+                .Items(
+                    X.GridPanel().ID("grdSlsperID")
+                    .Region(Region.Center).Scroll(ScrollMode.Both)
+                    .Layout(LayoutType.Fit)
+                    .View(X.GridView().TrackOver(false).EnableTextSelection(true))
+                    .SortableColumns(true)
+                    .Store(
+                        X.Store().ID("stoSlsperID")
+                        .PageSize(20).AutoLoad(false)
+                        .Model(Util.GenerateModel(typeof(OM20500_pgSalesPerson_Result), "mdlSalesPerson", ""))
+                        .Parameters(ps =>
+                        {
+                            ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                            ps.Add(new StoreParameter("territory", "joinParams(App.cboSlsTerritory)", ParameterMode.Raw));
+                        })
+                        .ServerProxy(X.AjaxProxy().Url(Url.Action("GetSalesPerson")))
+                        .Listeners(p =>
+                        {
+                            p.Load.Handler = "HQ.common.showBusy(false);";
+                            p.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.getLang('loadingData'));";
+                        })
+                    )
+                    .ColumnModel(
+                        X.RowNumbererColumn().Width(30)  
+                                          
+                        , X.CheckColumn().Filterable(true)
+                            .HideTitleEl(true).DataIndex("Selected")
+                            .Align(Alignment.Center).ToolTip(Util.GetLangJS("Selected"))
+                            .Width(34)
+                            .Editable(true)
+                            .HeaderItems(
+                                HQ.Checkbox().ID("chkSelectHeader")
+                                .Handler("chkSelectHeader_change")
+                            )
+                            
+                        , X.Column()
+                            .Text(Util.GetLangJS("SupID")).DataIndex("SupID").Width(110)
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("SupName")).DataIndex("SupName").Flex(1)
+                            
+                        , X.Column()
+                            .Text(Util.GetLangJS("SlsperId")).DataIndex("SlsperId").Width(110)
+
+                        , X.Column()
+                            .Text(Util.GetLangJS("SlsName")).DataIndex("Name").Flex(1)
+                    )        
+                .BottomBar(
+                X.PagingToolbar()
+                .HideRefresh(true)
+                .Items(
+                    X.Label(Util.GetLangJS("PageSize")),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("20")
+                    .Listeners(l =>
+                    {
+                        l.Select.Fn = "HQ.grid.onPageSelect";
+                    })
+                ).HideRefresh(true)
+                .Plugins(X.ProgressBarPager())
+
+                )
+                .Features(
+                X.GridFilters()
+                .Local(true)
+                .Filters(                                                    
+                    X.BooleanFilter().DataIndex("Selected"),
+                    X.StringFilter().DataIndex("SlsperId").ValidateRecord(p => p.Fn = "stringFilter"),
+                    X.StringFilter().DataIndex("Name").ValidateRecord(p => p.Fn = "stringFilter"),
+                    X.StringFilter().DataIndex("SupID").ValidateRecord(p => p.Fn = "stringFilter"),
+                    X.StringFilter().DataIndex("SupName").ValidateRecord(p => p.Fn = "stringFilter")
+                )
+            )
+            )
+        )
+    )                               
+)  
+@(
+ X.Window()
+        .ID("winManualPromo")
+        .Hidden(true)
+        .Layout(LayoutType.Anchor)
+        .Height(400)
+        .Width(1000)
+        .MinHeight(100)
+        .MinWidth(150)
+        .Modal(true)
+        .Closable(true)
+        .Buttons(
+            X.Button().ID("btnManualOk").Text(Util.GetLangJS("OK")).IconCls("icon-iconok")
+            .Listeners(p => p.Click.Fn = "btnManualOk_Click")
+        )
+        .Items(
+            X.GridPanel().ID("grdManualPromo").MarginSpec("5 0 5 0")
+            .Border(true).BorderSpec("1 0 0 0").Anchor("100% -25")
+            .Store(
+                X.Store()
+                    .ID("stoManualPromo")
+                .PageSize(50)
+                .Model(Util.GenerateModel(typeof(OM20500_pgManualPromo_Result), "mdlManualPromo", ""))
+                .Parameters(ps =>
+                {
+                    ps.Add(new StoreParameter("branchID", "App.cboCpnyID.getValue()", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("slsperID", "_slsperID", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("custID", "_custID", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("orderDate", "_orderDate", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("totalAmt", "_totalAmt", ParameterMode.Raw));
+                    ps.Add(new StoreParameter("orderNbr", "_orderNbr", ParameterMode.Raw));
+                })
+                .ServerProxy(X.AjaxProxy().Url(Url.Action("GetManualPromo"))).AutoLoad(false)
+            )
+            .ColumnModel(
+                X.RowNumbererColumn()
+
+                , X.CheckColumn().DataIndex("Selected").Text("").Width(40).Editable(true).Align(Alignment.Center)
+                , X.Column().DataIndex("DiscCode").Text(Util.GetLangJS("DiscCode"))
+                , X.Column().DataIndex("Descr").Text(Util.GetLangJS("Descr")).MinWidth(150)
+                , X.Column().DataIndex("PromoTypeDescr").Text(Util.GetLangJS("PromoType")).MinWidth(100)
+                , X.NumberColumn().DataIndex("Discount").Text(Util.GetLangJS("Discount")).Format("0,000.00").Align(Alignment.Right).StyleSpec("text-align:right").Width(80)//.Renderer("PopupwinManualPromo.renderDiscount")
+                .Editor(
+                    HQ.NumberField().MinValue(0)
+                )
+                , X.Column().DataIndex("FreeItemID").Text(Util.GetLangJS("FreeItemID")).Width(100)
+                , X.Column().DataIndex("UnitDescr").Text(Util.GetLangJS("UnitDescr")).Width(60)
+                , X.Column().DataIndex("SiteType").Text(Util.GetLangJS("SiteID")).MinWidth(90)
+                , X.NumberColumn().DataIndex("FreeItemQty").Text(Util.GetLangJS("FreeItemQty")).Format("0,000").Align(Alignment.Right).StyleSpec("text-align:right").Width(100)
+                .Editor(
+                    HQ.NumberField().MinValue(0).DecimalPrecision(0)
+                )
+                , X.NumberColumn().DataIndex("TotalDiscout").Text(Util.GetLangJS("OM10100TotalDiscout")).Format("0,000").Align(Alignment.Right).StyleSpec("text-align:right").Width(120)
+                , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLangJS("Reject"))
+                        .ToolTip(t => t.Text = Util.GetLangJS("Rejectrowchanges"))
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t => t.Handler = "toolbar.items.get(0).setVisible(record.dirty);")
+                    .Listeners(l => l.Command.Handler = "grdManualPromo_Reject(record);")
+            )
+            .SelectionModel(Html.X().RowSelectionModel().ID("smlManualPromo").Mode(SelectionMode.Single))
+            .View(X.GridView().TrackOver(false))
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdManualPromo_BeforeEdit";
+                    ls.Edit.Fn = "grdManualPromo_Edit";
+                    ls.ValidateEdit.Fn = "grdManualPromo_ValidateEdit";
+                })
+            )
+            .Features(
+                X.GridFilters()
+                .Local(true)
+                .Filters(
+                    X.BooleanFilter().DataIndex("Selected"),
+                    X.StringFilter().DataIndex("DiscCode"),
+                    X.StringFilter().DataIndex("Descr"),
+                    X.BooleanFilter().DataIndex("PromoTypeDescr"),
+                    X.NumericFilter().DataIndex("Discount"),
+                    X.StringFilter().DataIndex("FreeItemID"),
+                    X.StringFilter().DataIndex("UnitDescr"),
+                    X.StringFilter().DataIndex("SiteType"),
+                    X.NumericFilter().DataIndex("FreeItemQty"),
+                    X.NumericFilter().DataIndex("TotalDiscout")
+                )
+            )
+        )
+)
+
+
+@(X.Window().ID("winCloseOrder").Title(Util.GetLangJS("ClosePO"))
+        .Hidden(true)
+        .Resizable(false)
+        .Width(350)
+            .Listeners(l =>
+            {
+                l.BeforeShow.Handler = "App.frmMain.mask();";
+                l.BeforeHide.Handler = "App.frmMain.unmask();";
+                l.BeforeClose.Handler = "App.frmMain.unmask();";
+            })
+        .Items(                    
+                  HQ.Combo().ID("cboReasonCode").Name("cboReasonCode").DataIndex("ReasonCode").HQLangCodeJS("ReasonCD")
+                    .HQProcedure("OM20500_pcReasonCode").HQColumnShow("Code,Descr")
+                    .DisplayField("Descr").ValueField("Code")
+                    .LabelWidth(130).Width(300).HQHeightWidth(400, 300).MarginSpec("5 0 5 0")
+                    .AllowBlank(false)
+                    .ForceSelection(true)
+                    .HQControlFocus("cboReasonCode")
+                    .HQParam(new StoreParameterCollection(){
+                        new StoreParameter() { Name = "@UserID", Value = "HQ.userName", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw },
+                        new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw },
+                    })
+                    .Listeners(p =>
+                    {
+                        p.Focus.Handler = "HQ.focus='closeOrder';";
+                    })
+                    .LoadData()
+            )
+            .Buttons(
+                X.Button().ID("btnCloseOk").Text(Util.GetLangJS("OK"))
+                .Listeners(p => p.Click.Fn = "Event.Form.btnCloseOk_Click")
+        )
+)
+

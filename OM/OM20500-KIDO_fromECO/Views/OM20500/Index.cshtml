@@ -1,0 +1,189 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using OM20500;
+@model System.Collections.IEnumerable
+  
+@{
+    Layout = null;
+    var X = Html.X();
+    ViewBag.Title = "OM20500";
+    var acc = Session["OM20500"] as AccessRight;
+    var HQ = Html.HQ();
+}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <link href="~/Content/ComboXTemplate.css" rel="stylesheet" />
+        <script src='@Url.Content("Scripts/hq.language"+Current.LangID+".js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/hq.common.js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+        <script src='@Url.Content("Scripts/Screen/OM20500.js?"+DateTime.Now.ToString("yyyyMMddHHss"))' type="text/javascript"></script>
+
+        @Scripts.Render("~/language" + Current.LangID)
+        @Styles.Render("~/extcss")
+        @*@Scripts.Render("~/extjs")
+        @Scripts.Render("~/OM20500JS")*@
+
+         <style type="text/css">          
+            .hightlight-row .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+	            background-color: #CCFF33 !important;
+            }
+            .hightlight-rowyellow .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 background-color: yellow !important;
+            }
+
+             .hightlight-row-IsOutOfStock .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 background-color: #CCFF33 !important;
+                 color: #FF9933 !important;
+             }
+
+             .hightlight-rowyellow-IsOutOfStock .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 background-color: yellow !important;
+                 color: #FF9933 !important;
+             }
+
+             .hightlight-IsOutOfStock .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 color: #FF9933 !important;
+             }
+
+            .hightlight-rowDocColor .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 background-color: #D3D3D3 !important;
+                 font-weight: 550;
+            }      
+
+            .hightlight-IsOutOfStockBudget .x-grid-cell, .dirty-row .x-grid-rowwrap-div {
+                 color:blue !important;
+             }
+            .images-view .x-panel-body {
+                background: white;
+                font: 11px Arial, Helvetica, sans-serif;
+            }
+
+            .images-view .thumb {
+                background: #dddddd;
+                padding: 3px;
+                padding-bottom: 0;
+            }
+
+            .x-quirks .images-view .thumb {
+                padding-bottom: 3px;
+            }
+
+            /*.images-view .thumb img {
+                height: 60px;
+                width: 80px;
+            }*/
+
+            .images-view .thumb-wrap {
+                float: left;
+                margin: 4px;
+                margin-right: 0;
+                padding: 5px;
+            }
+
+            .images-view .thumb-wrap span {
+                display: block;
+                overflow: hidden;
+                text-align: center;
+                /*width: 86px;*/
+            }
+
+            .images-view .x-item-over {
+                border: 1px solid #dddddd;
+                /*background: #efefef url(images/row-over.gif) repeat-x left top;*/
+                background: #efefef repeat-x left top;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected {
+                /*background: #eff5fb url(images/selected.gif) no-repeat right bottom;*/
+                background: #eff5fb no-repeat right bottom;
+                border: 1px solid #99bbe8;
+                padding: 4px;
+            }
+
+            .images-view .x-item-selected .thumb {
+                background: transparent;
+            }
+
+            .images-view .loading-indicator {
+                font-size: 11px;
+                /*background-image : url('images/loading.gif');*/
+                background-repeat: no-repeat;
+                background-position: left;
+                padding-left: 20px;
+                margin: 10px;
+            }
+
+            .x-view-selector {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 0;
+                border: 1px dotted;
+                opacity: .5;
+                -moz-opacity: .5;
+                filter: alpha(opacity=50);
+                zoom: 1;
+                background-color: #c3daf9;
+                border-color: #3399bb;
+            }
+
+            .ext-strict .ext-ie .x-tree .x-panel-bwrap {
+                position: relative;
+                overflow: hidden;
+            }
+
+             #btnChoiceOk {
+                 float: right;
+             }
+
+             #bottomBar {
+                 Width: 100%;
+             }
+
+             #ctnBottomBar {
+                 Width: 100%;
+             }
+
+             #ctnBottomBar-outerCt {
+                 Width: 100%;
+             }
+
+             #ctnBottomBar-innerCt {
+                 Width: 100%;
+             }
+            .icon-invisible {
+                background-image: url(Images/OM20500/IconSupplier.png) !important;
+                background-size:18px 18px;
+            }
+        </style>
+        <script type="text/javascript">
+            HQ.cpnyID = '@Current.CpnyID';
+            HQ.langID = '@Current.LangID';
+            HQ.userName = '@Current.UserName';
+            HQ.isUpdate = HQ.util.toBool('@acc.Update.ToString()');
+            HQ.isInsert = HQ.util.toBool('@acc.Insert.ToString()');
+            HQ.isDelete = HQ.util.toBool('@acc.Delete.ToString()');
+            HQ.isRelease = HQ.util.toBool('@acc.Release.ToString()');
+            HQ.bussinessDate = new Date('@DateTime.Now.ToDateShort()'); 
+            HQ.FormatDate = '@Current.FormatDate';
+            HQ.formatDateJS = '@Current.FormatDateJS';
+            if (HQ.formatDateJS == '') {
+                HQ.formatDateJS = 'm-d-Y';
+            }
+        </script>
+
+        <title>@ViewBag.Title</title>
+    </head>
+    <body>
+        @(X.ResourceManager().Theme((Theme)Enum.Parse(typeof(Theme),Current.Theme.PassNull()==""?"Default":Current.Theme.PassNull())))
+
+        @X.GridFilters() 
+        @X.ProgressBarPager() 
+
+        @{ Html.RenderAction("Body", new { lang = Current.LangID }); }
+    </body>
+</html>

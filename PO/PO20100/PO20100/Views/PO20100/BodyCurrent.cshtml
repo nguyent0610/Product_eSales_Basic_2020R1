@@ -1,0 +1,587 @@
+@using Ext.Net;
+@using Ext.Net.MVC;
+@using HQ.eSkyFramework;
+@using HQ.eSkyFramework.HQControl;
+@using PO20100;
+@{
+    Layout = null;
+    var X = Html.X();
+    var HQ = Html.HQ();
+
+    var decimalPrecision = 0;
+    PO20100Entities _db = Util.CreateObjectContext<PO20100Entities>(false);
+    var obj = _db.PO20100_pdConfig(Current.UserName, Current.CpnyID, Current.LangID).FirstOrDefault();
+    if (obj != null && obj.DecimalPrecision.HasValue && obj.DecimalPrecision.Value > 0)
+    {
+        decimalPrecision = obj.DecimalPrecision.Value;
+    }
+    string formatNumber = "0,000";
+    if (decimalPrecision > 0)
+    {
+        formatNumber += ".";
+        for (int i = 0; i < decimalPrecision; i++)
+        {
+            formatNumber += "0";
+        }
+    }
+}
+
+@(
+ X.Store().ID("stoPOPriceHeader")
+            .Model(Util.GenerateModel(typeof(PO_PriceHeader), "mdlPOPriceHeader", "PriceID"))
+            .Proxy(
+                    X.AjaxProxy()
+                    .Url(Url.Action("GetPOPriceHeader", "PO20100"))
+                    .ActionMethods(action =>
+                    {
+                        action.Read = HttpMethod.POST;
+                    })
+                    .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+                )
+            .Parameters(ps =>
+                            {
+                                ps.Add(new StoreParameter("PriceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
+                            })
+            .Listeners(l =>
+                {
+                    l.BeforeLoad.Fn = "stoBeforeLoad";
+                    l.Load.Fn = "stoLoad";
+                }
+            )
+)
+@(HQ.Store().ID("stoUOM_InvtID").HQProcedure("PO20100_pcUOM_InvtID")
+        .HQParam(new StoreParameterCollection()
+            {
+                new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
+
+            }).LoadData()
+        //.Listeners(lst => {
+        //    lst.BeforeLoad.Handler = "HQ.common.showBusy(true, HQ.common.GetLang('loadingData'));";
+        //    lst.Load.Handler = "HQ.common.showBusy(false)";
+        //})
+)
+
+@(X.Store().ID("stoPriceIDCopy").AutoLoad(false).Model(Util.GenerateModel(typeof(PO20100_pcPriceIDCopy_Result), "mdlPriceIDCopy", "", true))
+        .Proxy(
+                X.AjaxProxy()
+                        .Url(Url.Action("GetPOPriceCopy", "PO20100"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+        //.Parameters(ps =>
+        //    {
+        //        ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+        //    })
+)
+@(X.Store().ID("stoGetPOPriceCopy").AutoLoad(false).Model(Util.GenerateModel(typeof(PO20100_pgGetPOPriceCopy_Result), "mdlGetPOPriceCopy", "", true))
+        .Proxy(
+                X.AjaxProxy()
+                        .Url(Url.Action("GetPOPriceCopy", "PO20100"))
+                .ActionMethods(action =>
+                {
+                    action.Read = HttpMethod.POST;
+                })
+                .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+            })
+)
+@(X.Store().ID("stoPOPriceCpnyCopy").AutoLoad(false).Model(Util.GenerateModel(typeof(PO20100_pgGetPOPriceCpnyCopy_Result), "mdlgetPOPriceCpnyCopy", "", true))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetPOPriceCpnyCopy", "PO20100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+            })
+)
+@(X.Store().ID("stoHeaderCopy").AutoLoad(false).Model(Util.GenerateModel(typeof(PO20100_pgPriceHeader_Result), "mdlHeaderCopy", "", true))
+        .Proxy(
+            X.AjaxProxy()
+            .Url(Url.Action("GetPriceHeader", "PO20100"))
+            .ActionMethods(action =>
+            {
+                action.Read = HttpMethod.POST;
+            })
+            .Reader(X.JsonReader().Root("data").TotalProperty("totaldata"))
+            )
+            .Parameters(ps =>
+            {
+                ps.Add(new StoreParameter("priceID", "App.cboPriceIDCopy.getValue()", ParameterMode.Raw));
+            })
+)
+
+
+
+@(X.Viewport()
+.Layout(LayoutType.Fit)
+.Items(
+    X.FormPanel()
+    .ID("frmMain")
+    .BodyPadding(0)
+    .KeyMap(Util.SetupKeyMap())
+        .TopBar(Util.SetupToolbar(new AbstractComponent[]{
+            X.FileUploadField()
+            .ID("btnImport")
+            .ButtonText(Util.GetLang("Import"))
+            .ButtonOnly(true)
+            .Icon(Icon.BookAdd)
+            .Listeners(p=>{
+                p.Change.Fn = "btnImport_Click";
+                p.Render.Fn = "btnImport_Render";
+            })
+            , X.Button()
+            .ID("btnExport")
+            .Text(Util.GetLang("Export"))
+            .Icon(Icon.ArrowTurnRight)
+            .Listeners(p=>{
+                p.Click.Fn = "btnExport_Click";
+                p.Render.Fn = "btnExport_Render";
+            })
+        }, "Print", true, ""))
+    .Layout(LayoutType.Border)
+    .Listeners(l =>
+    {
+        l.BoxReady.Handler = "firstLoad()";
+        l.FieldChange.Fn = "frmChange";
+    })
+    .Items(
+        ////Thiet ke giao dien o day
+        X.Panel().ID("pnlHeader")
+            .Region(Region.North).Layout(LayoutType.HBox)
+            .AutoScroll(true)
+        .Items(
+            X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+            .Items(
+                    HQ.Combo().ID("cboPriceID").Name("cboPriceID").HQLangCode("PriceID").HQProcedure("PO20100_pcPriceID").AllowBlank(false)
+                    .HQColumnShow("PriceID,Descr,StatusDescr,EffDate").DisplayField("PriceID").ValueField("PriceID").Width(250).HQHeightWidth(400, 450).MaxLength(20).EnforceMaxLength(true)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Fn = "cboPriceID_TriggerClick";//khi nhan X xoa du lieu goi ham de kiem tra
+                        //lst.Change.Fn = "cboPriceID_Change";
+                        lst.Expand.Fn = "cboPriceID_Expand";  //khi nhan xo ra du lieu cho chon, kiem tra xem co cho xo hay ko?
+                        lst.Blur.Fn = "cboPriceID_Blur";
+                        lst.Select.Fn = "cboPriceID_Select";
+                        lst.Focus.Fn = "cboPriceID_Focus";
+                    })
+                , HQ.NumberField().ID("txtFill").Name("txtFill").HQLangCode("PO20100Fill").Width(250)/// .MaskRe(@"/[0-9-,-/ ]/")
+            )
+            , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+            .Items(
+                   HQ.TextBox().ID("Descr").Name("Descr").HQLangCode("Descr").Width(200).MaxLength(200).EnforceMaxLength(true).AllowBlank(false)
+                   .MarginSpec("0 0 0 10").HQControlFocus("LastPONbr").HideLabel(true).Listeners(lst => { })
+                    , HQ.Button().ID("btnFill").HQLangCode("Fill").Width(200).Icon(Icon.TabEdit).MarginSpec("5 0 0 10")
+                    .Listeners(lst =>
+                    {
+                        lst.Click.Handler = "btnFill_Click()";
+                    })
+            )
+            , X.Container().Layout(LayoutType.VBox).MarginSpec("5 0 5 0")
+            .Items(
+
+                X.Container().Layout(LayoutType.HBox).MarginSpec("0 0 5 0")
+                .Items(
+                     HQ.Button().HQLangCode("CopyFrom").MarginSpec("0 5 0 10").ID("btnCopy").Width(110).Listeners(l => l.Click.Fn = "btnCopy_click")
+
+                    , HQ.Combo().ID("cboPriceIDCopy").Name("cboPriceIDCopy").HQProcedure("PO20100_pcPriceIDCopy").HideLabel(true).HQLangCode("PriceID").ForceSelection(true)
+                    .HQColumnShow("PriceID,Descr,StatusDescr,EffDate").DisplayField("PriceID").ValueField("PriceID").Width(200).HQHeightWidth(400, 450).MaxLength(20).EnforceMaxLength(true)
+                    .HQParam(new StoreParameterCollection() {
+                        new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                        , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw }
+                    })
+                    .LoadData()
+                    .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                    .Listeners(lst =>
+                    {
+                        lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}"; //khi nhan X xoa du lieu goi ham de kiem tra
+                        lst.Blur.Fn = "cboPriceIDCopy_Blur";
+                    })
+                )
+                , HQ.DateField().ID("EffDate").Name("EffDate").HQLangCode("EffDate").Width(325).AllowBlank(false).LabelWidth(145).InputWidth(200)
+                .Format(Current.FormatDate).MarginSpec("0 0 0 -25")
+            )
+            , X.Container().Layout(LayoutType.VBox).Margins("0 0 0 0")
+            .Items(
+                    HQ.Checkbox().ID("Status").Name("Status").HQLangCode("ACTIVE").LabelWidth(200).Margins("5 0 0 10").Width(200).Tag("X")
+                   , HQ.Checkbox().ID("Public").Name("Public").HQLangCode("Public").LabelWidth(160).Margins("0 0 0 10").Width(200)
+                    .Listeners(lst =>
+                    {
+                        lst.Change.Fn = "chkPublic_Change";
+                    })
+            )
+             , X.Container().Layout(LayoutType.VBox).Margins("5 0 0 0")
+            .Items(
+                 HQ.Combo().ID("cboStatus").Name("cboStatus").HQProcedure("PO20100_pcStatus").HQLangCode("Status").ReadOnly(true).Tag("X").DataIndex("StatusApprove")
+                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Code").Width(300).HQHeightWidth(400, 300).MaxLength(20).EnforceMaxLength(true)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw }
+                })
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                    lst.Change.Handler = "App.cboHandle.store.reload();";
+                })
+                
+                ,HQ.Combo().ID("cboHandle").Name("cboHandle").HQProcedure("PO20100_pcHandle").HQLangCode("Handle").Tag("X")
+                .HQColumnShow("Code,Descr").DisplayField("Descr").ValueField("Handle").Width(300).HQHeightWidth(400, 300).MaxLength(20).EnforceMaxLength(true)
+                .HQParam(new StoreParameterCollection() {
+                    new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@LangID", Value ="HQ.langID", Mode = ParameterMode.Raw }
+                    , new StoreParameter() { Name = "@Status", Value = "App.cboStatus.getValue()", Mode = ParameterMode.Raw}
+                })
+                .LoadData()
+                .Triggers(new FieldTrigger() { Icon = TriggerIcon.Clear, HideTrigger = false })
+                .Listeners(lst =>
+                {
+                    lst.TriggerClick.Handler = "if (index == 0) { this.clearValue();}";
+                })
+            )
+        )
+        .Listeners(lss =>
+        {
+            lss.Render.Fn = "pnl_render";
+        })
+
+        , X.TabPanel().ID("tabBot")
+        .Region(Region.Center)
+        .Items(
+            X.Panel().ID("pnlPO_Price")
+            .Title(Util.GetLang("POPrice"))
+            .Layout(LayoutType.Border)
+            .Items(
+                X.GridPanel().ID("grdPO_Price")
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .Region(Region.Center).Flex(1)
+                .SortableColumns(true)
+                .Store(
+                     X.Store().AutoLoad(false)
+                    .ID("stoPO_Price")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(PO20100_pgGetPOPrice_Result), "mdlPO_Price", "PriceID,InvtID"))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("PriceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPO_Price")))
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoPO_Price_Load";
+                        l.Update.Fn = "frmChange";
+                    })
+                )
+                .Listeners(p => p.BoxReady.Handler = "App.stoPO_Price.reload();")
+                .SortableColumns(true)
+                .ColumnModel(
+
+                    X.RowNumbererColumn()
+                    , X.Column().Text(Util.GetLang("InvtID")).DataIndex("InvtID").Width(150).ID("InvtID")
+                    .Editor(
+                        HQ.Combo().ID("cboInvtID")
+                        .Name("cboInvtID").HQProcedure("PO20100_pcInventoryActive")
+                        .HQColumnShow("InvtID,Descr").DisplayField("InvtID").ValueField("InvtID")
+                        .Width(200).HQHeightWidth(500, 400)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).HQAutoLoad(false)
+                            .HQParam(new StoreParameterCollection() {
+                                new StoreParameter() { Name = "@CpnyID", Value = "HQ.cpnyID", Mode = ParameterMode.Raw}
+                                ,new StoreParameter() { Name = "@UserName", Value = "HQ.userName", Mode = ParameterMode.Raw}
+                                ,new StoreParameter() { Name = "@LangID", Value = "HQ.langID", Mode = ParameterMode.Raw}
+                            })
+                        .LoadData()
+                        .Listeners(lst =>
+                        {
+                            lst.Change.Fn = "cboInvtID_Change";
+                        })
+                    )
+                    , X.Column().Text(Util.GetLang("Descr")).DataIndex("Descr").Width(250).Renderer("renderInvtName")
+                    , X.Column().Text(Util.GetLang("UOM")).DataIndex("UOM").Width(100)
+                    .Editor(
+                        HQ.Combo().ID("cboUOM").Name("cboUOM").HQProcedure("PO20100_pcUOM_InvtID")
+                        .StoreID("stoUOM_InvtID")
+        //.HQParam(new StoreParameterCollection()
+        //{
+        //    new StoreParameter() { Name = "@InvtID", Value = "_invtID" , Mode = ParameterMode.Raw }
+        //})
+                        .HQColumnShow("FromUnit").DisplayField("FromUnit").ValueField("FromUnit")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .HQDBSys(false).AllowBlank(true).HQAutoLoad(false)
+                        .Listeners(lst =>
+                        {
+                            lst.Blur.Handler = "App.cboUOM.forceSelection = true";
+                            lst.Focus.Handler = "App.cboUOM.forceSelection = false";
+                        })
+                        .LoadData()
+                    )
+                    , X.NumberColumn().Text(Util.GetLang("QtyBreak")).DataIndex("QtyBreak").Width(120).Format("0,000,000").Align(Alignment.Right).StyleSpec("text-align:left")//.Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).DecimalPrecision(0).AllowExponential(false)).Align(Alignment.Right).StyleSpec("text-align:left")
+                    , X.NumberColumn().Text(Util.GetLang("PO20100Price")).DataIndex("Price").Width(120).Format(formatNumber).Editor(X.NumberField().MaskRe(@"/[\d]/").MinValue(0).AllowExponential(false).DecimalPrecision(decimalPrecision)).Align(Alignment.Right).StyleSpec("text-align:left")
+                    , X.NumberColumn().Text(Util.GetLang("PO20100Disc")).DataIndex("Disc").Width(150).Format("00.00").Editor(X.NumberField().MaskRe(@"/[0-9-,-/ ]/")).Align(Alignment.Right).StyleSpec("text-align:left")
+
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t =>
+                        {
+                            t.Text = ("Rejectrowchanges");
+                        })
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdPO_Price_Reject(record);";
+                    })
+            )
+            .SelectionModel(X.RowSelectionModel().ID("slmPO_Price")
+            .Mode(SelectionMode.Multi))
+            .BottomBar(
+                X.PagingToolbar()
+                .HideRefresh(true)
+                .Items(
+                    X.Label(Util.GetLang("PageSize")),
+                    X.ToolbarSpacer(10),
+                    X.ComboBox()
+                    .Width(80)
+                    .Items("1", "2", "10", "20", "30", "50")
+                    .SelectedItems("50")
+                    .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                )
+                .Plugins(X.ProgressBarPager())
+            )
+            .Plugins(
+                X.CellEditing()
+                .ClicksToEdit(1)
+                .Listeners(ls =>
+                {
+                    ls.BeforeEdit.Fn = "grdPO_Price_BeforeEdit";
+                    ls.Edit.Fn = "grdPO_Price_Edit";
+                    ls.ValidateEdit.Fn = "grdPO_Price_ValidateEdit";
+                })
+            )
+
+            .Features(
+                X.GridFilters()
+                    .Local(true)
+                    .Filters(
+                        X.StringFilter().DataIndex("InvtID"),
+                        X.StringFilter().DataIndex("Descr"),
+                        X.StringFilter().DataIndex("UOM"),
+                        X.NumericFilter().DataIndex("QtyBreak"),
+                        X.NumericFilter().DataIndex("Price"),
+                        X.NumericFilter().DataIndex("Disc")
+
+                    )
+            )
+            )
+            .Listeners(lss =>
+            {
+                lss.Render.Fn = "pnl_render";
+            })
+        //tabpnlPrice
+
+
+
+            , X.Panel().ID("pnlPO_PriceCpny")
+            .Title(Util.GetLang("APPCOMP"))
+            .Layout(LayoutType.Border)
+            .CloseAction(CloseAction.Hide)
+            .Items(
+                X.Panel().ID("treeBranch")
+            .Region(Region.West).Flex(30)
+            .MinWidth(150).Split(true).AutoScroll(true)
+            .Listeners(l =>
+            {
+                l.AfterRender.Handler = "treeBranch_AfterRender('treeBranch');";
+            }
+            )
+                .BottomBar(
+                    X.Toolbar()
+                    .Items(
+                        X.ToolbarFill()
+
+                        , HQ.Button().ID("btnExpand")
+                        .HQLangCode("Expand")
+                        .Icon(Icon.BulletTogglePlus)
+                        .Handler("btnExpand_click")
+
+                        , X.ToolbarSpacer()
+                        , X.ToolbarSeparator()
+                        , X.ToolbarSpacer()
+
+                        , HQ.Button().ID("btnCollapse")
+                        .HQLangCode("Collapse")
+                        .Icon(Icon.BulletToggleMinus)
+                        .Handler("btnCollapse_click")
+
+                        , X.ToolbarFill()
+                    )
+                )
+
+                , X.Panel()
+                .Region(Region.Center).Flex(10)
+                .Layout(LayoutType.VBox)
+                .MinWidth(50)
+                .LayoutConfig(new VBoxLayoutConfig { Align = VBoxAlign.Stretch, Pack = BoxPack.Center })
+                .Items(
+                    HQ.Button().ID("btnAddAll")
+                    .ToolTip(Util.GetLang("AddAll")).HQLangCode("AddAll")
+                    .Icon(Icon.ForwardGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnAddAll_click")
+
+                    , HQ.Button().ID("btnAdd")
+                    .ToolTip(Util.GetLang("Add")).HQLangCode("Add")
+                    .Icon(Icon.PlayGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnAdd_click")
+
+                    , HQ.Button().ID("btnDel")
+                    .ToolTip(Util.GetLang("Del")).HQLangCode("Del")
+                    .Icon(Icon.ReverseGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnDel_click")
+
+                    , HQ.Button().ID("btnDelAll")
+                    .ToolTip(Util.GetLang("DelAll")).HQLangCode("DelAll")
+                    .Icon(Icon.RewindGreen).MarginSpec("5 5 0 5")
+                    .Handler("btnDelAll_click")
+                ),
+                X.Panel().ID("pnlgrid_Tree")
+                .Region(Region.East).Flex(60)
+                .Layout(LayoutType.Border)
+                .Items(
+                        X.GridPanel()
+                .Scroll(ScrollMode.Both)
+                .View(X.GridView().TrackOver(false))
+                .ID("grdPO_PriceCpny")
+                .Region(Region.Center).Flex(1)
+                .SortableColumns(true)
+                .Store(
+                     X.Store().AutoLoad(false)
+                    .ID("stoPO_PriceCpny")
+                    .PageSize(50)
+                    .Model(Util.GenerateModel(typeof(PO20100_pgGetPOPriceCpny_Result), "mdlPO_PriceCpny", "PriceID,CpnyID"))
+                    .Parameters(ps =>
+                    {
+                        ps.Add(new StoreParameter("PriceID", "App.cboPriceID.getValue()", ParameterMode.Raw));
+                    })
+                    .ServerProxy(X.AjaxProxy().Url(Url.Action("GetPO_PriceCpny")))
+                    .Listeners(l =>
+                    {
+                        l.Load.Fn = "stoPO_PriceCpny_Load";
+                    })
+                )
+        //.Listeners(p => p.BoxReady.Handler = "App.stoPO_PriceCpny.reload();")
+                .SortableColumns(true)
+                .ColumnModel(
+
+                 X.RowNumbererColumn().Width(30)
+                    , X.Column().Text(Util.GetLang("CpnyID")).DataIndex("CpnyID").Width(150).ID("txtCpny")
+                    .Editor(
+                        HQ.Combo().ID("cboCpnyID").Name("cboCpnyID").HQProcedure("PO20100_pcBranchAllByUser")
+                        .HQColumnShow("BranchID,BranchName").DisplayField("BranchID").ValueField("BranchID")
+                        .Width(300).HQHeightWidth(500, 400)
+                        .AllowBlank(true).ForceSelection(true).HQDBSys(false).HQAutoLoad(false)
+                        .HQParam(new StoreParameterCollection() {
+                            new StoreParameter() { Name = "@UserID", Value = "HQ.userName" , Mode = ParameterMode.Raw }
+                        })
+                        .LoadData()
+                    )
+                    , X.Column().Text(Util.GetLang("CpnyName")).DataIndex("CpnyName").Flex(1).Renderer("renderBranchName")
+                    , X.Column().ID("ColCpnyType").Text(Util.GetLang("PO20100CpnyType")).DataIndex("CpnyType").Flex(1)//.Renderer("renderBranchName")
+
+                    , X.CommandColumn().Width(150)
+                    .Commands(
+                        X.GridCommand()
+                        .Text(Util.GetLang("Reject"))
+                        .ToolTip(t =>
+                        {
+                            t.Text = ("Rejectrowchanges");
+                        })
+                        .CommandName("reject")
+                        .Icon(Icon.ArrowUndo)
+                    )
+                    .PrepareToolbar(t =>
+                    {
+                        t.Handler = "toolbar.items.get(0).setVisible(record.dirty);";
+                    })
+                    .Listeners(l =>
+                    {
+                        l.Command.Handler = "grdPO_PriceCpny_Reject(record);";
+                    })
+
+                )
+                .SelectionModel(X.RowSelectionModel().ID("slmPO_PriceCpny").Mode(SelectionMode.Multi))
+                .BottomBar(
+                    X.PagingToolbar()
+                    .HideRefresh(true)
+                    .Items(
+                        X.Label(Util.GetLang("PageSize")),
+                        X.ToolbarSpacer(10),
+                        X.ComboBox()
+                        .Width(80)
+                        .Items("1", "2", "10", "20", "30", "50")
+                        .SelectedItems("50")
+                        .Listeners(l => l.Select.Fn = "HQ.grid.onPageSelect")
+                    )
+                    .Plugins(X.ProgressBarPager())
+                )
+                .Plugins(
+                    X.CellEditing()
+                    .ClicksToEdit(1)
+                    .Listeners(ls =>
+                    {
+                        ls.BeforeEdit.Fn = "grdPO_PriceCpny_BeforeEdit";
+                        ls.Edit.Fn = "grdPO_PriceCpny_Edit";
+                        ls.ValidateEdit.Fn = "grdPO_PriceCpny_ValidateEdit";
+                    })
+                )
+
+                .Features(
+                    X.GridFilters()
+                        .Local(true)
+                        .Filters(
+                            X.StringFilter().DataIndex("CpnyID"),
+                            X.StringFilter().DataIndex("CpnyName")
+                        )
+                )
+                )
+
+            )
+            .Listeners(lss =>
+            {
+                lss.Render.Fn = "pnl_render";
+            })
+        )
+        .Listeners(ls =>
+        {
+            ls.TabChange.Fn = "pnlPO_PriceCpny_Active";
+        })
+    )// frmMain
+)
+)

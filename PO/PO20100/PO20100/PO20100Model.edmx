@@ -1,0 +1,604 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="eBiz4DWebSysModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityType Name="PO_Price">
+          <Key>
+            <PropertyRef Name="VendID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="UOM" />
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Name="VendID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="InvtID" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="UOM" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="LUpd_DateTime" Type="datetime" Nullable="false" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="400" Nullable="false" />
+          <Property Name="QtyBreak" Type="float" Nullable="false" />
+          <Property Name="Disc" Type="float" />
+        </EntityType>
+        <EntityType Name="PO_PriceCpny">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="CpnyID" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PO_PriceHeader">
+          <Key>
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Name="PriceID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Status" Type="bit" Nullable="false" />
+          <Property Name="Descr" Type="nvarchar" MaxLength="200" />
+          <Property Name="EffDate" Type="smalldatetime" Nullable="false" />
+          <Property Name="Public" Type="bit" Nullable="false" />
+          <Property Name="HOCreate" Type="bit" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="datetime" />
+          <Property Name="Crtd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="Crtd_User" Type="varchar" MaxLength="30" />
+          <Property Name="LUpd_DateTime" Type="datetime" />
+          <Property Name="LUpd_Prog" Type="varchar" MaxLength="8" />
+          <Property Name="LUpd_User" Type="varchar" MaxLength="30" />
+          <Property Name="tstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="Disc" Type="float" />
+          <Property Name="StatusApprove" Type="varchar" MaxLength="2" Nullable="false" />
+        </EntityType>
+        <Function Name="PO20100_pcInventoryActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pcUOM_InvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvtID" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pdConfig" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pgGetPOPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pgGetPOPriceCopy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pgGetPOPriceCpny" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pgGetPOPriceCpnyCopy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_pgPriceHeader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="PriceID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_piInventoryActive" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+          <Parameter Name="InvtID" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_piUOM_InvtID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="InvtID" Type="nvarchar" Mode="In" />
+          <Parameter Name="FromUnit" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="PO20100_ptTreeNode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <Function Name="PO20700_pgPO_ReasonCode" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CpnyID" Type="varchar" Mode="In" />
+          <Parameter Name="UserName" Type="varchar" Mode="In" />
+          <Parameter Name="LangID" Type="smallint" Mode="In" />
+        </Function>
+        <EntityContainer Name="eBiz4DWebSysModelStoreContainer">
+          <EntitySet Name="PO_Price" EntityType="Self.PO_Price" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceCpny" EntityType="Self.PO_PriceCpny" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PO_PriceHeader" EntityType="Self.PO_PriceHeader" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PO20100Model" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="PO20100Entities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="PO_Price" EntityType="PO20100Model.PO_Price" />
+          <FunctionImport Name="PO20100_pdConfig" ReturnType="Collection(PO20100Model.PO20100_pdConfig_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_ptTreeNode" ReturnType="Collection(PO20100Model.PO20100_ptTreeNode_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pcInventoryActive" ReturnType="Collection(PO20100Model.PO20100_pcInventoryActive_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pcUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_pcUOM_InvtID_Result)">
+          <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_piUOM_InvtID" ReturnType="Collection(PO20100Model.PO20100_piUOM_InvtID_Result)">
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+            <Parameter Name="FromUnit" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="PO_PriceCpny" EntityType="PO20100Model.PO_PriceCpny" />
+          <FunctionImport Name="PO20700_pgPO_ReasonCode" ReturnType="Collection(PO20100Model.PO20700_pgPO_ReasonCode_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPrice" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPrice_Result)">
+          <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPriceCpny" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpny_Result)">
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPriceCopy" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCopy_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgGetPOPriceCpnyCopy" ReturnType="Collection(PO20100Model.PO20100_pgGetPOPriceCpnyCopy_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pcPriceIDCopy" ReturnType="Collection(PO20100Model.PO20100_pcPriceIDCopy_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="PO20100_pgPriceHeader" ReturnType="Collection(PO20100Model.PO20100_pgPriceHeader_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="PriceID" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="PO_PriceHeader" EntityType="PO20100Model.PO_PriceHeader" />
+          <FunctionImport Name="PO20100_piInventoryActive" ReturnType="Collection(PO20100Model.PO20100_piInventoryActive_Result)">
+            <Parameter Name="UserName" Mode="In" Type="String" />
+            <Parameter Name="CpnyID" Mode="In" Type="String" />
+            <Parameter Name="LangID" Mode="In" Type="Int16" />
+            <Parameter Name="InvtID" Mode="In" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+        <EntityType Name="PO_Price">
+          <Key>
+            <PropertyRef Name="VendID" />
+            <PropertyRef Name="InvtID" />
+            <PropertyRef Name="UOM" />
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UOM" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="DateTime" Name="Crtd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="Crtd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Crtd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LUpd_DateTime" Nullable="false" Precision="3" />
+          <Property Type="String" Name="LUpd_Prog" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="LUpd_User" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="QtyBreak" Nullable="false" />
+          <Property Type="Double" Name="Disc" />
+        </EntityType>
+        <ComplexType Name="PO20100_pdConfig_Result">
+          <Property Type="String" Name="DecimalPrecision" Nullable="true" MaxLength="50" />
+          <Property Type="Boolean" Name="NoPriceCalculation" Nullable="true" />
+          <Property Type="Boolean" Name="hideChkPublic" Nullable="true" />
+          <Property Type="Boolean" Name="hideCpnyType" Nullable="true" />
+          <Property Type="Int32" Name="DecimalInput" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PO20100_ptTreeNode_Result">
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="ParentID" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="LevelID" Nullable="true" />
+          <Property Type="String" Name="Type" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="10" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pcInventoryActive_Result">
+          <Property Type="String" Name="BarCode" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr1" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltSite" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltSOUnit" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="SOPrice" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+          <Property Type="String" Name="ValMthd" Nullable="true" MaxLength="1" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="String" Name="StkWt" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pcUOM_InvtID_Result">
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <ComplexType Name="PO20100_piUOM_InvtID_Result">
+          <Property Type="String" Name="FromUnit" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="ClassId" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="InvtId" Nullable="false" MaxLength="30" />
+        </ComplexType>
+        <EntityType Name="PO_PriceCpny">
+          <Key>
+            <PropertyRef Name="PriceID" />
+            <PropertyRef Name="CpnyID" />
+          </Key>
+          <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CpnyID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="PO20700_pgPO_ReasonCode_Result">
+          <Property Type="String" Name="Code" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="Binary" Name="tstamp" Nullable="false" MaxLength="8" />
+          <Property Type="Boolean" Name="Reasonable" Nullable="false" />
+          <Property Type="Boolean" Name="ReasonIsShow" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPrice_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UOM" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="400" />
+          <Property Type="Double" Name="QtyBreak" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Double" Name="Disc" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPriceCpny_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPriceCopy_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="VendID" Nullable="false" MaxLength="15" />
+          <Property Type="Double" Name="QtyBreak" Nullable="false" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Double" Name="Disc" Nullable="true" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="UOM" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="tstamp" Nullable="true" />
+          <Property Type="String" Name="Descr" Nullable="false" MaxLength="400" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgGetPOPriceCpnyCopy_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="CpnyName" Nullable="true" MaxLength="200" />
+          <Property Type="String" Name="CpnyType" Nullable="true" MaxLength="15" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pcPriceIDCopy_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="Boolean" Name="Status" Nullable="false" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+        </ComplexType>
+        <ComplexType Name="PO20100_pgPriceHeader_Result">
+          <Property Type="String" Name="PriceID" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="200" />
+          <Property Type="DateTime" Name="CreateTime" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="PO_PriceHeader">
+          <Key>
+            <PropertyRef Name="PriceID" />
+          </Key>
+          <Property Name="PriceID" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Boolean" Nullable="false" />
+          <Property Name="Descr" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="EffDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Public" Type="Boolean" Nullable="false" />
+          <Property Name="HOCreate" Type="Boolean" Nullable="false" />
+          <Property Name="Crtd_DateTime" Type="DateTime" Precision="3" />
+          <Property Name="Crtd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="Crtd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_DateTime" Type="DateTime" Precision="3" />
+          <Property Name="LUpd_Prog" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+          <Property Name="LUpd_User" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="tstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Disc" Type="Double" />
+          <Property Name="StatusApprove" Type="String" Nullable="false" MaxLength="2" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <ComplexType Name="PO20100_piInventoryActive_Result">
+          <Property Type="String" Name="BarCode" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="Descr1" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="InvtID" Nullable="false" MaxLength="30" />
+          <Property Type="String" Name="Descr" Nullable="true" MaxLength="100" />
+          <Property Type="String" Name="Color" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="CpnyID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="ClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="StkUnit" Nullable="true" MaxLength="15" />
+          <Property Type="String" Name="PriceClassID" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="TaxCat" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="DfltSite" Nullable="true" MaxLength="30" />
+          <Property Type="String" Name="DfltSOUnit" Nullable="true" MaxLength="15" />
+          <Property Type="Double" Name="SOPrice" Nullable="false" />
+          <Property Type="Double" Name="SOFee" Nullable="false" />
+          <Property Type="String" Name="ValMthd" Nullable="true" MaxLength="1" />
+          <Property Type="Int16" Name="StkItem" Nullable="false" />
+          <Property Type="String" Name="StkWt" Nullable="true" MaxLength="200" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="eBiz4DWebSysModelStoreContainer" CdmEntityContainer="PO20100Entities" >
+          <EntitySetMapping Name="PO_Price">
+            <EntityTypeMapping TypeName="PO20100Model.PO_Price">
+              <MappingFragment StoreEntitySet="PO_Price">
+                <ScalarProperty Name="Disc" ColumnName="Disc" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="UOM" ColumnName="UOM" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pdConfig" FunctionName="eBiz4DWebSysModel.Store.PO20100_pdConfig" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pdConfig_Result">
+                <ScalarProperty Name="DecimalPrecision" ColumnName="DecimalPrecision" />
+                <ScalarProperty Name="NoPriceCalculation" ColumnName="NoPriceCalculation" />
+                <ScalarProperty Name="hideChkPublic" ColumnName="hideChkPublic" />
+                <ScalarProperty Name="hideCpnyType" ColumnName="hideCpnyType" />
+                <ScalarProperty Name="DecimalInput" ColumnName="DecimalInput" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_ptTreeNode" FunctionName="eBiz4DWebSysModel.Store.PO20100_ptTreeNode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_ptTreeNode_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pcInventoryActive" FunctionName="eBiz4DWebSysModel.Store.PO20100_pcInventoryActive">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pcInventoryActive_Result">
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pcUOM_InvtID" FunctionName="eBiz4DWebSysModel.Store.PO20100_pcUOM_InvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pcUOM_InvtID_Result">
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_piUOM_InvtID" FunctionName="eBiz4DWebSysModel.Store.PO20100_piUOM_InvtID">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_piUOM_InvtID_Result">
+                <ScalarProperty Name="FromUnit" ColumnName="FromUnit" />
+                <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+                <ScalarProperty Name="InvtId" ColumnName="InvtId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PO_PriceCpny">
+            <EntityTypeMapping TypeName="PO20100Model.PO_PriceCpny">
+              <MappingFragment StoreEntitySet="PO_PriceCpny">
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO20700_pgPO_ReasonCode" FunctionName="eBiz4DWebSysModel.Store.PO20700_pgPO_ReasonCode">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20700_pgPO_ReasonCode_Result">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Reasonable" ColumnName="Reasonable" />
+                <ScalarProperty Name="ReasonIsShow" ColumnName="ReasonIsShow" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPrice" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPrice">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPrice_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="UOM" ColumnName="UOM" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Disc" ColumnName="Disc" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCpny" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCpny">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCpny_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCopy" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCopy">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCopy_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="VendID" ColumnName="VendID" />
+                <ScalarProperty Name="QtyBreak" ColumnName="QtyBreak" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Disc" ColumnName="Disc" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="UOM" ColumnName="UOM" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgGetPOPriceCpnyCopy" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgGetPOPriceCpnyCopy">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgGetPOPriceCpnyCopy_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="CpnyName" ColumnName="CpnyName" />
+                <ScalarProperty Name="CpnyType" ColumnName="CpnyType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_pgPriceHeader" FunctionName="eBiz4DWebSysModel.Store.PO20100_pgPriceHeader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_pgPriceHeader_Result">
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="PO_PriceHeader">
+            <EntityTypeMapping TypeName="PO20100Model.PO_PriceHeader">
+              <MappingFragment StoreEntitySet="PO_PriceHeader">
+                <ScalarProperty Name="StatusApprove" ColumnName="StatusApprove" />
+                <ScalarProperty Name="Disc" ColumnName="Disc" />
+                <ScalarProperty Name="tstamp" ColumnName="tstamp" />
+                <ScalarProperty Name="LUpd_User" ColumnName="LUpd_User" />
+                <ScalarProperty Name="LUpd_Prog" ColumnName="LUpd_Prog" />
+                <ScalarProperty Name="LUpd_DateTime" ColumnName="LUpd_DateTime" />
+                <ScalarProperty Name="Crtd_User" ColumnName="Crtd_User" />
+                <ScalarProperty Name="Crtd_Prog" ColumnName="Crtd_Prog" />
+                <ScalarProperty Name="Crtd_DateTime" ColumnName="Crtd_DateTime" />
+                <ScalarProperty Name="HOCreate" ColumnName="HOCreate" />
+                <ScalarProperty Name="Public" ColumnName="Public" />
+                <ScalarProperty Name="EffDate" ColumnName="EffDate" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PO20100_piInventoryActive" FunctionName="eBiz4DWebSysModel.Store.PO20100_piInventoryActive">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="PO20100Model.PO20100_piInventoryActive_Result">
+                <ScalarProperty Name="BarCode" ColumnName="BarCode" />
+                <ScalarProperty Name="Descr1" ColumnName="Descr1" />
+                <ScalarProperty Name="InvtID" ColumnName="InvtID" />
+                <ScalarProperty Name="Descr" ColumnName="Descr" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="CpnyID" ColumnName="CpnyID" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+                <ScalarProperty Name="StkUnit" ColumnName="StkUnit" />
+                <ScalarProperty Name="PriceClassID" ColumnName="PriceClassID" />
+                <ScalarProperty Name="TaxCat" ColumnName="TaxCat" />
+                <ScalarProperty Name="DfltSite" ColumnName="DfltSite" />
+                <ScalarProperty Name="DfltSOUnit" ColumnName="DfltSOUnit" />
+                <ScalarProperty Name="SOPrice" ColumnName="SOPrice" />
+                <ScalarProperty Name="SOFee" ColumnName="SOFee" />
+                <ScalarProperty Name="ValMthd" ColumnName="ValMthd" />
+                <ScalarProperty Name="StkItem" ColumnName="StkItem" />
+                <ScalarProperty Name="StkWt" ColumnName="StkWt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="eBiz4DWebSysModel" ZoomLevel="93" >
+        <EntityTypeShape EntityType="PO20100Model.PO_Price" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PO20100Model.PO_PriceCpny" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="PO20100Model.PO_PriceHeader" Width="1.5" PointX="3.375" PointY="3.75" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
