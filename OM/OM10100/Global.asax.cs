@@ -41,7 +41,7 @@ namespace OM10100
             Session["CpnyID"] = Current.CpnyID = "HQSOFT";
             Session["Language"] = Current.Language = "vi";
             Session["LangID"] = 0;
-            Current.Debug = false;
+            Current.Debug = true;
         }
     }
 }

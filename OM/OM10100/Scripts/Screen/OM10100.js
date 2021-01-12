@@ -1818,7 +1818,7 @@ var grdOrdDet_BeforeEdit = function (sender, e) {
     if (key == "BOCustID" && record.data.BOType != "B" && record.data.BOType != "0") {
         return false;
     }
-    if (record.data.FreeItem && (!Ext.isEmpty(record.data.DiscID1) || !Ext.isEmpty(record.data.GroupDiscID1))) {
+    if (record.data.FreeItem && (!Ext.isEmpty(record.data.DiscID1) || !Ext.isEmpty(record.data.GroupDiscID1)) && App.cboOrderType.getValue() != "IR") {
         return false;
     }
     if ((record.data.FreeItem || record.data.BOType == "R") && (key == "SlsPrice" || key == "DiscAmt" || key == "DiscPct")) {
