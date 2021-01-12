@@ -446,7 +446,10 @@ var menuClick = function (command) {
                                 if (App.smlOrdDet.selected.items.length != 0) {
                                     //Bo ra theo yeu cau anh Suong 10/11/2016 (cho xoa hang co check KM)
                                     if (!Ext.isEmpty(App.smlOrdDet.selected.items[0].data.InvtID)) {
-                                        if (countNotFreeItem <= 1) {
+                                        if (App.smlOrdDet.selected.items[0].data.FreeItem == true && App.cboOrderType.getValue() == _ReturnOrder) {
+                                            HQ.message.show(2015020806, [App.smlOrdDet.selected.items[0].data.InvtID], 'deleteDet', true);
+                                        }
+                                        else if (countNotFreeItem <= 1) {
                                             HQ.message.show(2020062260);
                                             return false;
                                         }
@@ -465,7 +468,10 @@ var menuClick = function (command) {
                                         return;//KM tu dong khong cho xoa
                                     }
                                     else {
-                                        if (countNotFreeItem <= 1) {
+                                        if (App.smlOrdDet.selected.items[0].data.FreeItem == true && App.cboOrderType.getValue() == _ReturnOrder) {
+                                            HQ.message.show(2015020806, [App.smlOrdDet.selected.items[0].data.InvtID], 'deleteDet', true);
+                                        }
+                                        else if (countNotFreeItem <= 1) {
                                             HQ.message.show(2020062260);
                                             return false;
                                         }
